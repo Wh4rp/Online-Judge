@@ -1,0 +1,11 @@
+#navbar {
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+}
+
+#navbar .navbar-item {
+    margin: 0 10px;
+    height: 100%;
+    cursor: pointer;
+}

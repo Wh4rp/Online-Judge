@@ -1,0 +1,68 @@
+.problem-container > h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #212529;
+    text-align: center;
+}
+
+.problem-container > h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #212529;
+}
+
+.problem-constraints {
+    text-align: center;
+}
+
+.problem-constraints > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.problem-constraints > ul > li {
+    display: inline-block;
+    margin: 0 0.5rem;
+}
+
+.example > ul {
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0px 10px;
+}
+
+.example > ul > li {
+    padding: 3px 10px;
+    margin: 0.5rem 0;
+    background-color: #f8f9fa;
+}
+
+.input-example, .output-example {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+}
+
+.submit-solution {
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.submit-form {
+    width: 90%;
+}
+
+.submit-form > table {
+    margin: 0 auto;
+}
+
+.submit-form > table > tbody > tr > td {
+    padding: 0.2rem 0.5rem;
+}
+
+.description > p > img {
+    max-width: 100%;
+}
