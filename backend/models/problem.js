@@ -87,6 +87,10 @@ const problemSchema = new mongoose.Schema({
         test_cases: {
             type: [
                 {
+                    id : {
+                        type: Number,
+                        required: [true, "Test case id is required"],
+                    },
                     input: {
                         type: String,
                         required: [true, "Test case input is required"],

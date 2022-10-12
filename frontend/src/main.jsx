@@ -16,6 +16,7 @@ import ErrorPage from "./error-page";
 import AppLayout from './components/applayout';
 import ProblemList from './routes/problem-list';
 import Problem from './routes/problem';
+import AddProblem from './routes/add-problem';
 
 // Import loaders and helpers
 import { loader as problemsLoader } from "./routes/problem-list";
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
         path: "/problems/:problemId",
         element: <Problem />,
         loader: problemLoader,
+      },
+      {
+        path: "add-problem",
+        element: <AddProblem />,
       }
     ],
   },
