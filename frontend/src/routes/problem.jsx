@@ -6,12 +6,12 @@ import {
 
 import RenderMD from '../components/rendermd'
 
-import { getById } from "../services/problems";
+import { getBySlug } from "../services/problems";
 
 import './problem.css';
 
 export function loader({ params }) {
-    return getById(params.problemId);
+    return getBySlug(params.problemSlug);
 }
 
 const DescriptionProblem = ({ description }) => {
@@ -62,12 +62,12 @@ const Examples = ({ examples }) => {
     );
 }
 
-const Constraints = ({ timelimit, memorylimit }) => {
+const Constraints = ({ time_limit, memory_limit }) => {
     return (
         <div className="problem-constraints">
             <ul>
-                <li><b>Time limit</b>: {timelimit.toFixed(2)}s</li>
-                <li><b>Memory limit</b>: {memorylimit}MB</li>
+                <li><b>Time limit</b>: {time_limit.toFixed(2)}s</li>
+                <li><b>Memory limit</b>: {memory_limit}MB</li>
             </ul>
         </div>
     );
@@ -118,11 +118,11 @@ const Problem = () => {
     return (
         <div className="problem-container">
             <h1>{problem.title}</h1>
-            <Constraints timelimit={problem.timelimit} memorylimit={problem.memorylimit} />
-            <DescriptionProblem description={problem.description} />
-            <InputProblem input={problem.input} />
-            <OutputProblem output={problem.output} />
-            <Examples examples={problem.examples} />
+            <Constraints time_limit={problem.time_limit} memory_limit={problem.memory_limit} />
+            <DescriptionProblem description={problem.statement.main} />
+            <InputProblem input={problem.statement.input} />
+            <OutputProblem output={problem.statement.output} />
+            <Examples examples={problem.statement.examples} />
             <hr />
             <SubmitSolution />
         </div>

@@ -18,7 +18,7 @@ const ProblemList = () => {
             <ul>
                 {problems.map((problem) => (
                     <li key={problem.id}>
-                        <Link to={`/problems/${problem.id}`}>
+                        <Link to={`/problems/${problem.title_slug}`}>
                             {problem.title}
                         </Link>
                     </li>

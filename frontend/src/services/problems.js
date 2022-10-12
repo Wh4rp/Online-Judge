@@ -7,8 +7,8 @@ const getAll = async () => {
     return request.then(response => response.data)
 }
 
-const getById = async (id) => {
-    const request = axios.get(`${baseUrl}/${id}`)
+const getBySlug = async (slug) => {
+    const request = axios.get(`${baseUrl}/${slug}`)
     return request.then(response => response.data)
 }
 
@@ -27,4 +27,4 @@ const deleteObject = async (id) => {
     return request
 }
 
-export { getAll, getById, create, update, deleteObject }
+export { getAll, getBySlug, create, update, deleteObject }

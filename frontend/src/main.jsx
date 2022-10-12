@@ -38,7 +38,7 @@ const router = createBrowserRouter([
         loader: problemsLoader,
       },
       {
-        path: "/problems/:problemId",
+        path: "/problems/:problemSlug",
         element: <Problem />,
         loader: problemLoader,
       },

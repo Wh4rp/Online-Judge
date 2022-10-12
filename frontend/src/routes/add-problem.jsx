@@ -99,6 +99,30 @@ const AddProblemForm = () => {
         });
     };
 
+    const handleExample = (e) => {
+        const { name, value } = e.target;
+        const id = parseInt(name.split('-')[1]);
+        const field = name.split('-')[0];
+        setProblem({
+            ...problem,
+            data: {
+                ...problem.data,
+                statement: {
+                    ...problem.data.statement,
+                    examples: problem.data.statement.examples.map(example => {
+                        if (example.id === id) {
+                            return {
+                                ...example,
+                                [field]: value
+                            }
+                        }
+                        return example;
+                    })
+                }
+            }
+        });
+    };
+
     const handleChangeCheckerCustom = (e) => {
         setProblem({
             ...problem,
@@ -128,10 +152,32 @@ const AddProblemForm = () => {
         });
     };
 
+    const handleTestCase = (e) => {
+        const { name, value } = e.target;
+        const id = parseInt(name.split('-')[1]);
+        const field = name.split('-')[0];
+        setProblem({
+            ...problem,
+            checker: {
+                ...problem.checker,
+                test_cases: problem.checker.test_cases.map(test_case => {
+                    if (test_case.id === id) {
+                        return {
+                            ...test_case,
+                            [field]: value
+                        }
+                    }
+                    return test_case;
+                })
+            }
+        });
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        setErrors(validate(problem));
-        setIsSubmitting(true);
+        console.log('Sent')
+        console.log('problem', problem)
+        create(problem)
     };
 
     useEffect(
@@ -205,6 +251,9 @@ const AddProblemForm = () => {
                         </tr>
                         <tr>
                             <td>
+                                <label htmlFor="examples">Examples</label>
+                            </td>
+                            <td>
                                 <button type="addExample" onClick={handleAddExample}>
                                     Add Example
                                 </button>
@@ -217,9 +266,9 @@ const AddProblemForm = () => {
                                 </td>
                                 <td>
                                     <textarea
-                                        name="input"
+                                        name={`input-${example.id}`}
                                         id="input"
-                                        onChange={handleChangeData}
+                                        onChange={handleExample}
                                     />
                                     {errors.input && <p>{errors.input}</p>}
                                 </td>
@@ -228,9 +277,9 @@ const AddProblemForm = () => {
                                 </td>
                                 <td>
                                     <textarea
-                                        name="output"
+                                        name={`output-${example.id}`}
                                         id="output"
-                                        onChange={handleChangeData}
+                                        onChange={handleExample}
                                     />
                                     {errors.output && <p>{errors.output}</p>}
                                 </td>
@@ -293,6 +342,9 @@ const AddProblemForm = () => {
                         </tr>
                         <tr>
                             <td>
+                                <label htmlFor="examples">Examples</label>
+                            </td>
+                            <td>
                                 <button type="addTestCase" onClick={handleAddTestCase}>
                                     Add Test Case
                                 </button>
@@ -305,9 +357,9 @@ const AddProblemForm = () => {
                                 </td>
                                 <td>
                                     <textarea
-                                        name="input"
+                                        name={`input-${test_case.id}`}
                                         id="input"
-                                        onChange={handleChangeChecker}
+                                        onChange={handleTestCase}
                                     />
                                     {errors.input && <p>{errors.input}</p>}
                                 </td>
@@ -316,9 +368,9 @@ const AddProblemForm = () => {
                                 </td>
                                 <td>
                                     <textarea
-                                        name="output"
+                                        name={`output-${test_case.id}`}
                                         id="output"
-                                        onChange={handleChangeChecker}
+                                        onChange={handleTestCase}
                                     />
                                     {errors.output && <p>{errors.output}</p>}
                                 </td>
@@ -326,7 +378,7 @@ const AddProblemForm = () => {
                         ))}
                     </tbody>
                 </table>
-                <input type="submit" value="Submit" />
+                <button type="submit">Submit</button>
             </form>
         </div>
     );
