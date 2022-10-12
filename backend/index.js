@@ -1,7 +1,12 @@
-require("dotenv").config()
+require("dotenv").config() // Load environment variables from .env file
+
+// Import modules
+
 const express = require('express')
 const app = express()
 const Problem = require("./models/problem")
+
+// Add several middleware to app
 
 const cors = require("cors")
 app.use(cors())
@@ -14,21 +19,23 @@ app.use(logger)
 app.use(express.json())
 app.use(express.static("./dist"))
 
+// Define routes
+
 app.get('/api', (req, res) => {
-    res.send('Hello World!')
+    res.send('API is working!')
 })
 
 app.get('/api/problems', (req, res) => {
     Problem.find({}).then(problems => {
-        res.json(problems)
+        res.json(problems.map(problem => problem.data)) // Only return data field
     })
 })
 
-app.get('/api/problems/:id', (req, res, next) => {
-    Problem.findById(req.params.id)
+app.get('/api/problems/:title_slug', (req, res, next) => {
+    Problem.findOne({ "data.title_slug": req.params.title_slug })
         .then(problem => {
             if (problem) {
-                res.json(problem)
+                res.json(problem.data) // Only return data field
             } else {
                 res.status(404).end()
             }
@@ -37,34 +44,40 @@ app.get('/api/problems/:id', (req, res, next) => {
 })
 
 app.post('/api/problems', (req, res, next) => {
-    const body = req.body
+    console.log('req.body', req.body)
+    const data = req.body.data
+    const checker = req.body.checker
 
     const problem = new Problem({
-        title: body.title,
-        description: body.description,
-        input: body.input,
-        output: body.output,
-        examples: body.examples,
-        difficulty: body.difficulty,
-        tags: body.tags,
-        timelimit: body.timelimit,
-        memorylimit: body.memorylimit
+        data: {
+            ...data,
+            title_slug: body.title  // Slugify title
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^\w\s-]/g, '')
+                .replace(/[\s_-]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+        },
+        checker: checker
     })
 
     problem.save()
         .then(savedProblem => {
+            console.log('Saved new problem: ', savedProblem.title)
             res.json(savedProblem)
         })
         .catch(error => next(error))
 })
 
-app.delete('/api/problems/:id', (req, res, next) => {
-    Problem.findByIdAndRemove(req.params.id)
+app.delete('/api/problems/:title_slug', (req, res, next) => {
+    Problem.findOneAndRemove({ "data.title_slug": req.params.title_slug })
         .then(result => {
             res.status(204).end()
         })
         .catch(error => next(error))
 })
+
+// Handle errors with middleware
 
 const errorHandler = (error, req, res, next) => {
     console.error(error.message)
@@ -80,6 +93,8 @@ const errorHandler = (error, req, res, next) => {
 }
 
 app.use(errorHandler)
+
+// Start server
 
 const port = process.env.PORT || 3000
 
