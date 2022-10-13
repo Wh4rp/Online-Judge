@@ -4,7 +4,13 @@ require("dotenv").config() // Load environment variables from .env file
 
 const express = require('express')
 const app = express()
+const checker = require('./checker/checker')
+
+// Import models
+
+require("./models/mongodb") // Connect to MongoDB
 const Problem = require("./models/problem")
+const Submission = require("./models/submission")
 
 // Add several middleware to app
 
@@ -24,6 +30,8 @@ app.use(express.static("./dist"))
 app.get('/api', (req, res) => {
     res.send('API is working!')
 })
+
+// Problems requests
 
 app.get('/api/problems', (req, res) => {
     Problem.find({}).then(problems => {
@@ -80,6 +88,54 @@ app.delete('/api/problems/:title_slug', (req, res, next) => {
     Problem.findOneAndRemove({ "data.title_slug": req.params.title_slug })
         .then(result => {
             res.status(204).end()
+        })
+        .catch(error => next(error))
+})
+
+// Submissions requests
+
+app.get('/api/submissions', (req, res) => {
+    Submission.find({}).then(submissions => {
+        res.json(submissions)
+    })
+})
+
+app.get('/api/submissions/:id', (req, res, next) => {
+    Submission.findOne({ id: req.params.id })
+        .then(submission => {
+            if (submission) {
+                res.json(submission)
+            } else {
+                res.status(404).end()
+            }
+        })
+        .catch(error => next(error))
+})
+
+app.post('/api/submissions', (req, res, next) => {
+    const body = req.body
+
+    const submission = new Submission({
+        code: body.code,
+        language: body.language,
+        problem_slug: body.problem_slug,
+        status: "pending",
+        verdict: "pending",
+        time_execution: 0,
+        memory_execution: 0,
+    })
+
+    const problem = Problem.findOne({ "data.title_slug": body.problem_slug })
+
+    if (!problem) {
+        return res.status(400).json({ error: "Problem does not exist" })
+    }
+
+    submission.save()
+        .then(savedSubmission => {
+            console.log('Saved new submission: ', savedSubmission.id)
+            checker.check(savedSubmission, problem)
+            res.json(savedSubmission)
         })
         .catch(error => next(error))
 })
