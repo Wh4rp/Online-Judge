@@ -1,18 +1,6 @@
 const mongoose = require('mongoose')
 
-// Connect to MongoDB
-
-const url = process.env.MONGODB_URI
-console.log('connecting to', url)
-mongoose.connect(url)
-    .then(result => {
-        console.log('connected to MongoDB')
-    })
-    .catch((error) => {
-        console.log('error connecting to MongoDB:', error.message)
-    })
-
-// Define schema
+// Define problem schema
 
 const problemSchema = new mongoose.Schema({
     id: Number,
@@ -62,7 +50,6 @@ const problemSchema = new mongoose.Schema({
                 message: "At least one example is required",
                 required: [true, "Examples are required"],
             }
-            ,
         },
         time_limit: {
             type: Number,
@@ -118,6 +105,6 @@ problemSchema.set('toJSON', {
     }
 })
 
-// Define model
+// Export problem model
 
 module.exports = mongoose.model('Problem', problemSchema)
