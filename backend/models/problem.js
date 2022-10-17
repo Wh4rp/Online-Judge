@@ -29,10 +29,10 @@ const problemSchema = new mongoose.Schema({
                 type: String,
                 required: [true, "Output is required"],
             },
-            examples:{
+            examples: {
                 type: [
                     {
-                        id : {
+                        id: {
                             type: Number,
                             required: [true, "Example id is required"],
                         },
@@ -74,7 +74,7 @@ const problemSchema = new mongoose.Schema({
         test_cases: {
             type: [
                 {
-                    id : {
+                    id: {
                         type: Number,
                         required: [true, "Test case id is required"],
                     },

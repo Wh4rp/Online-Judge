@@ -10,7 +10,7 @@ const submissionSchema = new mongoose.Schema({
     },
     language: {
         type: String,
-        enum : ['c', 'cpp', 'java', 'python'],
+        enum: ['c', 'cpp', 'java', 'python'],
         required: [true, "Language is required"],
     },
     problem_slug: {
@@ -19,7 +19,7 @@ const submissionSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum : ['pending', 'running', 'done'],
+        enum: ['pending', 'running', 'done'],
         required: [true, "Status is required"],
     },
     verdict: {
