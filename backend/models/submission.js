@@ -13,11 +13,15 @@ const submissionSchema = new mongoose.Schema({
         enum: ['c', 'cpp', 'java', 'python'],
         required: [true, "Language is required"],
     },
+    problem_title: {
+        type: String,
+        required: [true, "Problem title is required"],
+    },
     problem_slug: {
         type: String,
         required: [true, "Problem slug is required"],
     },
-    checker : {
+    checker: {
         type: String,
     },
     status: {
@@ -28,9 +32,13 @@ const submissionSchema = new mongoose.Schema({
     verdicts: {
         type: [
             {
+                id: {
+                    type: Number,
+                    required: [true, "Verdict id is required"],
+                }
                 verdict: {
                     type: String,
-                    enum: ['pending', 'AC', 'WA', 'time_limit_exceeded', 'compilation_error', 'runtime_error'],
+                    enum: ['pending', 'AC', 'WA', 'time_limit_exceeded', 'compilation_error', 'Runtime Error'],
                     required: [true, "Verdict is required"],
                 },
                 time_execution: {
@@ -44,11 +52,20 @@ const submissionSchema = new mongoose.Schema({
             }
         ],
     },
+    global_verdict: {
+        type: String,
+        enum: ['pending', 'compilation error', 'solved', 'failed'],
+        required: [true, "Global verdict is required"],
+    },
     time_execution: {
         type: Number,
     },
     memory_execution: {
         type: Number,
+    },
+    submission_time: {
+        type: Date,
+        default: Date.now,
     },
 })
 

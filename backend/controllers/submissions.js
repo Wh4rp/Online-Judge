@@ -4,7 +4,7 @@ const Problem = require('../models/problem')
 const { checker } = require('../services/checker/checker')
 
 submissionsRouter.get('/', (req, res) => {
-    Submission.find({}).then(submissions => {
+    Submission.find({}).sort({ submission_time: -1 }).then(submissions => {
         res.json(submissions)
     })
 })
@@ -28,8 +28,10 @@ submissionsRouter.post('/', (req, res, next) => {
         code: body.code,
         language: body.language,
         problem_slug: body.problem_slug,
+        problem_title: body.problem_title,
         status: 'pending',
         verdicts: [],
+        global_verdict: 'pending',
         time_execution: 0,
         memory_execution: 0,
     })

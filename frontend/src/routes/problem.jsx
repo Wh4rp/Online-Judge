@@ -78,12 +78,13 @@ const Constraints = ({ time_limit, memory_limit }) => {
     );
 }
 
-const SubmitSolution = ({ slug_problem }) => {
+const SubmitSolution = ({ problem_title, slug_problem }) => {
     const navigate = useNavigate();
 
     const [submission, setSubmission] = useState({
         code: '',
         language: 'c',
+        problem_title: problem_title,
         problem_slug: slug_problem,
     });
 
@@ -154,7 +155,7 @@ const Problem = () => {
             <OutputProblem output={problem.statement.output} />
             <Examples examples={problem.statement.examples} />
             <hr />
-            <SubmitSolution slug_problem={problem.title_slug} />
+            <SubmitSolution problem_title={problem.title} slug_problem={problem.title_slug} />
         </div>
     );
 }

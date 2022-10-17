@@ -23,8 +23,9 @@ const runTestCase = async (run_command, custom, language_checker) => {
 
     if (run_test.status === 'error') {
         return {
-            status: 'runtime error',
-            message: run_test.message
+            verdict: 'Runtime Error',
+            time_execution: 0,
+            memory_execution: 0,
         }
     }
     else {
@@ -140,10 +141,13 @@ const checkTestCaseCustom_python = async () => {
 
 const checkSubmission = async (run_command, custom, checker, test_cases) => {
     let verdicts = []
+    let id = 0
     for (const test_case of test_cases) {
         await fs.writeFileSync('./services/checker/tmp/test_cases/input.txt', test_case.input)
         await fs.writeFileSync('./services/checker/tmp/test_cases/output_expected.txt', test_case.output)
-        const verdict = await runTestCase(run_command, custom, checker, test_case)
+        const verdict = await runTestCase(run_command, custom, checker, test_case, id)
+        verdict.id = id
+        id += 1
         verdicts.push(verdict)
     }
     return verdicts
@@ -175,10 +179,10 @@ const checker_cpp = async (submission, problem) => {
 
     // If compilation failed, return compilation error
     if (!compiled.success) {
-        return {
+        return [{
             verdict: "compilation_error",
             error: compiled.error,
-        }
+        }]
     }
     // If compilation succeeded
 
@@ -219,19 +223,36 @@ async function sleep(seconds) {
     return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 }
 
+const global_verdict = (verdicts) => {
+    let verdict = 'solved'
+    for (const v of verdicts) {
+        if (v.verdict === 'compilation_error') {
+            verdict = 'compilation_error'
+            break
+        }
+        if (v.verdict !== 'AC') {
+            verdict = 'failed'
+            break
+        }
+    }
+    return verdict
+}
+
 const checker = async (submission, problem) => {
     // Get submission language data
     const language = submission.language
+    let verdicts = []
     if (language === 'cpp') {
-        submission.verdicts = await checker_cpp(submission, problem)
-        submission.save()
-        return submission
+        verdicts = await checker_cpp(submission, problem)
     }
     if (language === 'python') {
-        submission.verdicts = await checker_python(submission, problem)
-        submission.save()
-        return submission
+        verdicts = await checker_python(submission, problem)
     }
+    submission.verdicts = verdicts
+    submission.global_verdict = global_verdict(verdicts)
+    submission.status = 'done'
+    submission.save()
+    return submission
 }
 
 module.exports = {
