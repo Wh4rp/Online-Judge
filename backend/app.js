@@ -7,6 +7,7 @@ const submissionsRouter = require('./controllers/submissions')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
+const path = require('path')
 
 logger.info('connecting to', config.MONGODB_URI)
 
@@ -25,6 +26,11 @@ app.use(middleware.requestLogger)
 
 app.use('/api/problems', problemsRouter)
 app.use('/api/submissions', submissionsRouter)
+
+app.get('*', function (req, res) {
+  console.log('__dirname', __dirname)
+  res.sendFile(path.resolve(__dirname, './dist/index.html'));
+});
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)

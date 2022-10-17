@@ -1,9 +1,11 @@
 import { create } from "../services/problems";
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import './add-problem.css';
 
 const AddProblemForm = () => {
+    const navigate = useNavigate();
     const [problem, setProblem] = useState({
         data: {
             title: "",
@@ -48,7 +50,7 @@ const AddProblemForm = () => {
                 [name]: value
             }
         });
-        console.log('problem', problem)
+        
     };
 
     const handleChangeStatement = (e) => {
@@ -63,7 +65,7 @@ const AddProblemForm = () => {
                 }
             }
         });
-        console.log('problem', problem)
+        
     };
 
     const handleChangeChecker = (e) => {
@@ -75,7 +77,7 @@ const AddProblemForm = () => {
                 [name]: value
             }
         });
-        console.log('problem', problem)
+        
     };
 
     const handleAddExample = (e) => {
@@ -131,7 +133,7 @@ const AddProblemForm = () => {
                 custom: !problem.checker.custom
             }
         });
-        console.log('problem', problem)
+        
     };
 
     const handleAddTestCase = (e) => {
@@ -178,6 +180,15 @@ const AddProblemForm = () => {
         console.log('Sent')
         console.log('problem', problem)
         create(problem)
+            .then(res => {
+                console.log('res', res)
+                // Redirect to problems list
+                navigate('/problems')
+            })
+            .catch(err => {
+                console.log('err', err)
+                // navigate('/problems')
+            })
     };
 
     useEffect(

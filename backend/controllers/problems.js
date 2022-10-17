@@ -30,6 +30,7 @@ problemsRouter.post('/', (req, res, next) => {
         .replace(/[^\w\s-]/g, '')
         .replace(/[\s_-]+/g, '-')
         .replace(/^-+|-+$/g, '')
+        .toLowerCase()
 
     if (Problem.findOne({ "data.title_slug": title_slug }).length > 0) {
         console.log('title_slug', title_slug)
