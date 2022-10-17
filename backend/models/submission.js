@@ -35,7 +35,7 @@ const submissionSchema = new mongoose.Schema({
                 id: {
                     type: Number,
                     required: [true, "Verdict id is required"],
-                }
+                },
                 verdict: {
                     type: String,
                     enum: ['pending', 'AC', 'WA', 'time_limit_exceeded', 'compilation_error', 'Runtime Error'],
