@@ -17,14 +17,32 @@ const submissionSchema = new mongoose.Schema({
         type: String,
         required: [true, "Problem slug is required"],
     },
+    checker : {
+        type: String,
+    },
     status: {
         type: String,
         enum: ['pending', 'running', 'done'],
         required: [true, "Status is required"],
     },
-    verdict: {
-        enum: ['pending', 'accepted', 'wrong_answer', 'time_limit_exceeded', 'compilation_error', 'runtime_error'],
-        type: String,
+    verdicts: {
+        type: [
+            {
+                verdict: {
+                    type: String,
+                    enum: ['pending', 'AC', 'WA', 'time_limit_exceeded', 'compilation_error', 'runtime_error'],
+                    required: [true, "Verdict is required"],
+                },
+                time_execution: {
+                    type: Number,
+                    required: [true, "Time execution is required"],
+                },
+                memory_execution: {
+                    type: Number,
+                    required: [true, "Memory execution is required"],
+                },
+            }
+        ],
     },
     time_execution: {
         type: Number,

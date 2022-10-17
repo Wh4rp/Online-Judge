@@ -2,13 +2,18 @@ import {
     Outlet,
     Link,
     useLoaderData,
+    useNavigate,
 } from "react-router-dom";
+
+import { useState, useEffect } from "react";
 
 import RenderMD from '../components/rendermd'
 
 import { getBySlug } from "../services/problems";
 
 import './problem.css';
+
+import { createSubmission } from "../services/submissions";
 
 export function loader({ params }) {
     return getBySlug(params.problemSlug);
@@ -73,10 +78,35 @@ const Constraints = ({ time_limit, memory_limit }) => {
     );
 }
 
-const SubmitSolution = () => {
+const SubmitSolution = ({ slug_problem }) => {
+    const navigate = useNavigate();
+
+    const { submission, setSubmission } = useState({
+        code: '',
+        language: 'c',
+        problem_slug: slug_problem,
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        createSubmission(submission)
+            .then((res) => {
+                console.log('response', response)
+                navigate(`/submissions`);
+            })
+    }
+
+    const handleChange = (e) => {
+        console.log(e.target.value);
+        setSubmission({
+            ...submission,
+            [e.target.name]: e.target.value,
+        });
+    }
+
     return (
         <div className="submit-solution">
-            <form className="submit-form">
+            <form className="submit-form" onSubmit={handleSubmit}>
                 <table>
                     <tbody>
                         <tr>
@@ -84,7 +114,7 @@ const SubmitSolution = () => {
                                 <label htmlFor="language">Language</label>
                             </td>
                             <td>
-                                <select name="language" id="language">
+                                <select name="language" id="language" onChange={handleChange}>
                                     <option value="c">C</option>
                                     <option value="cpp">C++</option>
                                     <option value="java">Java</option>
@@ -94,16 +124,16 @@ const SubmitSolution = () => {
                         </tr>
                         <tr>
                             <td>
-                                <label htmlFor="source">Source</label>
+                                <label htmlFor="code">Code</label>
                             </td>
                             <td>
-                                <textarea name="source" id="source" rows="10" cols="50"></textarea>
+                                <textarea name="code" id="source" rows="10" cols="50" onChange={handleChange}></textarea>
                             </td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>
-                                <button type="submit">Submit</button>
+                                <button type="submit" onClick={handleSubmit}>Submit</button>
                             </td>
                         </tr>
                     </tbody>
@@ -124,7 +154,7 @@ const Problem = () => {
             <OutputProblem output={problem.statement.output} />
             <Examples examples={problem.statement.examples} />
             <hr />
-            <SubmitSolution />
+            <SubmitSolution slug_problem={problem.title_slug} />
         </div>
     );
 }

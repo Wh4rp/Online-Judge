@@ -14,6 +14,9 @@ const NavBar = () => {
             <div className='navbar-item'>
                 <Link to='/add-problem'>Add Problem</Link>
             </div>
+            <div className='navbar-item'>
+                <Link to='/submissions'>Submissions</Link>
+            </div>
         </div>
     );
 }

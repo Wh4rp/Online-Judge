@@ -1,5 +1,7 @@
 const submissionsRouter = require('express').Router()
 const Submission = require('../models/submission')
+const Problem = require('../models/problem')
+const { checker } = require('../services/checker/checker')
 
 submissionsRouter.get('/', (req, res) => {
     Submission.find({}).then(submissions => {
@@ -26,25 +28,28 @@ submissionsRouter.post('/', (req, res, next) => {
         code: body.code,
         language: body.language,
         problem_slug: body.problem_slug,
-        status: "pending",
-        verdict: "pending",
+        status: 'pending',
+        verdicts: [],
         time_execution: 0,
         memory_execution: 0,
     })
 
-    const problem = Problem.findOne({ "data.title_slug": body.problem_slug })
-
-    if (!problem) {
-        return res.status(400).json({ error: "Problem does not exist" })
-    }
-
-    submission.save()
-        .then(savedSubmission => {
-            console.log('Saved new submission: ', savedSubmission.id)
-            checker.check(savedSubmission, problem)
-            res.json(savedSubmission)
-        })
-        .catch(error => next(error))
+    Problem.findOne({ "data.title_slug": body.problem_slug }, (err, problem) => {
+        if (err) {
+            console.log(err)
+        } else {
+            if (problem) {
+                submission.save()
+                    .then(savedSubmission => {
+                        console.log('Saved new submission: ', savedSubmission)
+                        console.log('problem', problem)
+                        checker(savedSubmission, problem)
+                        res.json(savedSubmission)
+                    })
+                    .catch(error => next(error))
+            }
+        }
+    })
 })
 
 module.exports = submissionsRouter

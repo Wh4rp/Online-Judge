@@ -4,7 +4,7 @@ const exec = util.promisify(require('child_process').exec)
 
 const runTestCase = async (run_command, custom, language_checker) => {
     const run_test = await new Promise((resolve, reject) => {
-        const command = `${run_command} <./tmp/test_cases/input.txt >./tmp/test_cases/output.txt`
+        const command = `${run_command} <./services/checker/tmp/test_cases/input.txt >./services/checker/tmp/test_cases/output.txt`
         exec(command, (err, stdout, stderr) => {
             if (err) {
                 resolve({
@@ -38,8 +38,8 @@ const runTestCase = async (run_command, custom, language_checker) => {
 }
 
 const checkTestCase = async () => {
-    const output = await fs.readFileSync('./tmp/test_cases/output.txt', 'utf8')
-    const output_expected = await fs.readFileSync('./tmp/test_cases/output_expected.txt', 'utf8')
+    const output = await fs.readFileSync('./services/checker/tmp/test_cases/output.txt', 'utf8')
+    const output_expected = await fs.readFileSync('./services/checker/tmp/test_cases/output_expected.txt', 'utf8')
 
     if (output === output_expected) {
         return {
@@ -141,8 +141,8 @@ const checkTestCaseCustom_python = async () => {
 const checkSubmission = async (run_command, custom, checker, test_cases) => {
     let verdicts = []
     for (const test_case of test_cases) {
-        await fs.writeFileSync('./tmp/test_cases/input.txt', test_case.input)
-        await fs.writeFileSync('./tmp/test_cases/output_expected.txt', test_case.output)
+        await fs.writeFileSync('./services/checker/tmp/test_cases/input.txt', test_case.input)
+        await fs.writeFileSync('./services/checker/tmp/test_cases/output_expected.txt', test_case.output)
         const verdict = await runTestCase(run_command, custom, checker, test_case)
         verdicts.push(verdict)
     }
@@ -154,11 +154,11 @@ const checker_cpp = async (submission, problem) => {
     const code = submission.code
 
     // Save code in run.cpp
-    await fs.writeFileSync('./tmp/run.cpp', code)
+    await fs.writeFileSync('./services/checker/tmp/run.cpp', code)
 
     // Compile submitted code
     const compiled = await new Promise((resolve, reject) => {
-        const command = `g++ ./tmp/run.cpp -o ./tmp/run.out`
+        const command = `g++ ./services/checker/tmp/run.cpp -o ./services/checker/tmp/run.out`
         exec(command, (err, stdout, stderr) => {
             if (err) {
                 resolve({
@@ -188,7 +188,7 @@ const checker_cpp = async (submission, problem) => {
     const test_cases = problem.checker.test_cases
 
     // Create run command
-    const command = `./tmp/run.out`
+    const command = `./services/checker/tmp/run.out`
 
     // Run each test case
     const verdict = await checkSubmission(command, custom, checker, test_cases)
@@ -200,10 +200,10 @@ const checker_python = async (submission, problem) => {
     const code = submission.code
 
     // Save code in run.py
-    await fs.writeFileSync('./tmp/run.py', code)
+    await fs.writeFileSync('./services/checker/tmp/run.py', code)
 
     // Create run command
-    const command = `python ./tmp/run.py`
+    const command = `python ./services/checker/tmp/run.py`
 
     // Get checker data
     const custom = problem.checker.custom
@@ -220,59 +220,23 @@ async function sleep(seconds) {
 }
 
 const checker = async (submission, problem) => {
+    console.log('Current directory: ' + process.cwd());
     // Get submission language data
     const language = submission.language
     if (language === 'cpp') {
-        return await checker_cpp(submission, problem)
+        submission.verdicts = await checker_cpp(submission, problem)
+        console.log('submission', submission)
+        submission.save()
+        return submission
     }
     if (language === 'python') {
-        return await checker_python(submission, problem)
+        submission.verdicts = await checker_python(submission, problem)
+        console.log('submission', submission)
+        submission.save()
+        return submission
     }
 }
 
-// export default checker
-
-// Test checker
-
-const submission1 = {
-    code: `#include <iostream>
-using namespace std;
-int main() {
-    int a, b;
-    cin >> a >> b;
-    cout << a + b << endl;
-    return 0;
-}`,
-    language: 'cpp',
+module.exports = {
+    checker,
 }
-
-const submission2 = {
-    code: `nums = map(int, input().split())
-print(sum(nums))`,
-    language: 'python',
-}
-
-const problem = {
-    checker: {
-        custom: false,
-        checker: '',
-        test_cases: [
-            {
-                input: '1 2',
-                output: '3\n',
-            },
-            {
-                input: '2 3',
-                output: '5\n',
-            },
-        ],
-    }
-}
-
-checker(submission1, problem).then((result) => {
-    console.log(result)
-})
-
-checker(submission2, problem).then((result) => {
-    console.log(result)
-})

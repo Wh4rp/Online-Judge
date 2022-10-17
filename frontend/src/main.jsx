@@ -16,11 +16,13 @@ import ErrorPage from "./error-page";
 import AppLayout from './components/applayout';
 import ProblemList from './routes/problem-list';
 import Problem from './routes/problem';
+import SubmissionList from './routes/submissions';
 import AddProblem from './routes/add-problem';
 
 // Import loaders and helpers
 import { loader as problemsLoader } from "./routes/problem-list";
 import { loader as problemLoader } from "./routes/problem";
+import { loader as submissionLoader } from "./routes/submissions";
 
 // Create and configure the router
 const router = createBrowserRouter([
@@ -41,6 +43,11 @@ const router = createBrowserRouter([
         path: "/problems/:problemSlug",
         element: <Problem />,
         loader: problemLoader,
+      },
+      {
+        path: "/submissions",
+        element: <SubmissionList />,
+        loader: submissionLoader,
       },
       {
         path: "add-problem",
