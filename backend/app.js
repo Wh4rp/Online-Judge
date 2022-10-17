@@ -28,7 +28,6 @@ app.use('/api/problems', problemsRouter)
 app.use('/api/submissions', submissionsRouter)
 
 app.get('*', function (req, res) {
-  console.log('__dirname', __dirname)
   res.sendFile(path.resolve(__dirname, './dist/index.html'));
 });
 
