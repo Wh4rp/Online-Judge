@@ -50,7 +50,7 @@ const AddProblemForm = () => {
                 [name]: value
             }
         });
-        
+
     };
 
     const handleChangeStatement = (e) => {
@@ -65,7 +65,7 @@ const AddProblemForm = () => {
                 }
             }
         });
-        
+
     };
 
     const handleChangeChecker = (e) => {
@@ -77,7 +77,7 @@ const AddProblemForm = () => {
                 [name]: value
             }
         });
-        
+
     };
 
     const handleAddExample = (e) => {
@@ -133,7 +133,7 @@ const AddProblemForm = () => {
                 custom: !problem.checker.custom
             }
         });
-        
+
     };
 
     const handleAddTestCase = (e) => {

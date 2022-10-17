@@ -220,18 +220,15 @@ async function sleep(seconds) {
 }
 
 const checker = async (submission, problem) => {
-    console.log('Current directory: ' + process.cwd());
     // Get submission language data
     const language = submission.language
     if (language === 'cpp') {
         submission.verdicts = await checker_cpp(submission, problem)
-        console.log('submission', submission)
         submission.save()
         return submission
     }
     if (language === 'python') {
         submission.verdicts = await checker_python(submission, problem)
-        console.log('submission', submission)
         submission.save()
         return submission
     }

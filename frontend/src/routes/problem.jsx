@@ -81,7 +81,7 @@ const Constraints = ({ time_limit, memory_limit }) => {
 const SubmitSolution = ({ slug_problem }) => {
     const navigate = useNavigate();
 
-    const { submission, setSubmission } = useState({
+    const [submission, setSubmission] = useState({
         code: '',
         language: 'c',
         problem_slug: slug_problem,
@@ -91,13 +91,13 @@ const SubmitSolution = ({ slug_problem }) => {
         e.preventDefault();
         createSubmission(submission)
             .then((res) => {
-                console.log('response', response)
+                console.log('response', res)
                 navigate(`/submissions`);
             })
     }
 
     const handleChange = (e) => {
-        console.log(e.target.value);
+        console.log(submission);
         setSubmission({
             ...submission,
             [e.target.name]: e.target.value,
