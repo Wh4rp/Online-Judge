@@ -23,7 +23,7 @@ const SubmissionList = () => {
                         <th>Language</th>
                         <th>Status</th>
                         <th>Verdict</th>
-                        <th>Detalles</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,7 +50,7 @@ const SubmissionItem = ({ id, problem_title, problem_slug, submission_time, lang
             <td>{status}</td>
             <td>{global_verdict}</td>
             <td>
-                <Link to={`/submissions/${id}/`}>Detalles</Link>
+                <Link to={`/submissions/${id}/`}>Details</Link>
             </td>
         </>
     );

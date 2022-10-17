@@ -10,7 +10,7 @@ submissionsRouter.get('/', (req, res) => {
 })
 
 submissionsRouter.get('/:id', (req, res, next) => {
-    Submission.findOne({ id: req.params.id })
+    Submission.findById(req.params.id)
         .then(submission => {
             if (submission) {
                 res.json(submission)
@@ -18,7 +18,6 @@ submissionsRouter.get('/:id', (req, res, next) => {
                 res.status(404).end()
             }
         })
-        .catch(error => next(error))
 })
 
 submissionsRouter.post('/', (req, res, next) => {

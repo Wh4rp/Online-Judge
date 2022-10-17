@@ -41,7 +41,7 @@ const SubmissionInfo = ({ submission }) => {
             <ul>
                 <li>Problem: {submission.problem_title}</li>
                 <li>Language: {submission.language}</li>
-                <li>Verdict: {submission.verdict}</li>
+                <li>Verdict: {submission.global_verdict}</li>
                 <li>Time: {submission.time_execution}</li>
                 <li>Memory: {submission.memory_execution}</li>
             </ul>
@@ -75,7 +75,7 @@ const SubmissionTestCases = ({ verdicts }) => {
 const SubmitTestCaseVerdict = ({ verdict }) => {
     return (
         <tr>
-            <td>{verdict.test_case}</td>
+            <td>{verdict.id}</td>
             <td>{verdict.verdict}</td>
             <td>{verdict.time_execution}</td>
             <td>{verdict.memory_execution}</td>

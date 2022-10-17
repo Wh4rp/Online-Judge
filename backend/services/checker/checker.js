@@ -23,7 +23,7 @@ const runTestCase = async (run_command, custom, language_checker) => {
 
     if (run_test.status === 'error') {
         return {
-            verdict: 'Runtime Error',
+            verdict: 'runtime error',
             time_execution: 0,
             memory_execution: 0,
         }
@@ -180,8 +180,10 @@ const checker_cpp = async (submission, problem) => {
     // If compilation failed, return compilation error
     if (!compiled.success) {
         return [{
-            verdict: "compilation_error",
-            error: compiled.error,
+            id: 0,
+            verdict: "compilation error",
+            time_execution: 0,
+            memory_execution: 0,
         }]
     }
     // If compilation succeeded
@@ -226,8 +228,8 @@ async function sleep(seconds) {
 const global_verdict = (verdicts) => {
     let verdict = 'solved'
     for (const v of verdicts) {
-        if (v.verdict === 'compilation_error') {
-            verdict = 'compilation_error'
+        if (v.verdict === 'compilation error') {
+            verdict = 'compilation error'
             break
         }
         if (v.verdict !== 'AC') {

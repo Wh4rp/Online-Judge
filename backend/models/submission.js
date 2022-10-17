@@ -3,7 +3,9 @@ const mongoose = require('mongoose')
 // Define schema
 
 const submissionSchema = new mongoose.Schema({
-    id: Number,
+    id: {
+        type: String
+    },
     code: {
         type: String,
         required: [true, "Code is required"],
@@ -38,7 +40,7 @@ const submissionSchema = new mongoose.Schema({
                 },
                 verdict: {
                     type: String,
-                    enum: ['pending', 'AC', 'WA', 'time_limit_exceeded', 'compilation_error', 'Runtime Error'],
+                    enum: ['pending', 'AC', 'WA', 'time_limit_exceeded', 'compilation error', 'runtime error'],
                     required: [true, "Verdict is required"],
                 },
                 time_execution: {
