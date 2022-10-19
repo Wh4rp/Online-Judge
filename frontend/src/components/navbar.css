@@ -9,3 +9,7 @@
     height: 100%;
     cursor: pointer;
 }
+
+#navbar .navbar-item-right {
+    margin-left: auto;
+}

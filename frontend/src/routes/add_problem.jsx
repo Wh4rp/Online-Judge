@@ -2,14 +2,13 @@ import { create } from "../services/problems";
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-import './add-problem.css';
+import './add_problem.css';
 
 const AddProblemForm = () => {
     const navigate = useNavigate();
     const [problem, setProblem] = useState({
         data: {
             name: "",
-            name_slug: "",
             statement: {
                 main: "",
                 input: "",
@@ -205,20 +204,19 @@ const AddProblemForm = () => {
             <form onSubmit={handleSubmit} noValidate>
                 <table>
                     <tbody>
-                        <tr key="title">
+                        <tr key="name">
                             <td>
-                                <label htmlFor="title">
-                                    Title of the problem
+                                <label htmlFor="name">
+                                    Name of the problem
                                 </label>
                             </td>
                             <td>
                                 <input
                                     type="text"
-                                    name="title"
-                                    id="title"
+                                    name="name"
+                                    id="name"
                                     onChange={handleChangeData}
                                 />
-                                {errors.title && <p>{errors.title}</p>}
                             </td>
                         </tr>
                         <tr key="statement">

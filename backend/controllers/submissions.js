@@ -41,8 +41,14 @@ submissionsRouter.post('/', async (req, res, next) => {
         })
     }
 
-    const user = await User.findById(body.user_id)
-    const problem = await Problem.findById(body.problem_id)
+    const user = await User.findById(decodedToken.id)
+    const problem = await Problem.findOne({ 'data.name_slug': body.problem_name_slug })
+    console.log('problem', problem)
+    if (!(user && problem)) {
+        return res.status(400).json({
+            error: 'user or problem not found'
+        })
+    }
 
     const submission = new Submission({
         code: body.code,
@@ -59,7 +65,7 @@ submissionsRouter.post('/', async (req, res, next) => {
     const submissionSaved = await submission.save()
     user.submissions = user.submissions.concat(submissionSaved._id)
     await user.save()
-    problem.submissions = problem.submissions.concat(submissionSaved._id)
+    problem.submissions = problem.data.submissions.concat(submissionSaved._id)
     const savedSubmission = await problem.save()
 
     checker(savedSubmission, problem)

@@ -13,7 +13,7 @@ import { getBySlug } from "../services/problems";
 
 import './problem.css';
 
-import { createSubmission } from "../services/submissions";
+import { createSubmission, setToken } from "../services/submissions";
 
 export function loader({ params }) {
     return getBySlug(params.problemSlug);
@@ -78,14 +78,13 @@ const Constraints = ({ time_limit, memory_limit }) => {
     );
 }
 
-const SubmitSolution = ({ problem_title, slug_problem }) => {
+const SubmitSolution = ({ problem, user }) => {
     const navigate = useNavigate();
 
     const [submission, setSubmission] = useState({
         code: '',
         language: 'c',
-        problem_title: problem_title,
-        problem_slug: slug_problem,
+        problem_name_slug: problem.name_slug,
     });
 
     const handleSubmit = async (e) => {
@@ -134,7 +133,7 @@ const SubmitSolution = ({ problem_title, slug_problem }) => {
                         <tr>
                             <td></td>
                             <td>
-                                <button type="submit" onClick={handleSubmit}>Submit</button>
+                                <button type="submit" onClick={handleSubmit} disabled={user === null}>Submit</button>
                             </td>
                         </tr>
                     </tbody>
@@ -146,18 +145,29 @@ const SubmitSolution = ({ problem_title, slug_problem }) => {
 
 const Problem = () => {
     const problem = useLoaderData();
+    const [user, setUser] = useState(null)
+
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('loggedJudgeAppUser')
+        if (loggedUserJSON) {
+            const user = JSON.parse(loggedUserJSON)
+            setUser(user)
+            setToken(user.token)
+        }
+    }, [])
+
     return (
         <div className="problem-container">
-            <h1>{problem.title}</h1>
+            <h1>{problem.name}</h1>
             <Constraints time_limit={problem.time_limit} memory_limit={problem.memory_limit} />
             <DescriptionProblem description={problem.statement.main} />
             <InputProblem input={problem.statement.input} />
             <OutputProblem output={problem.statement.output} />
             <Examples examples={problem.statement.examples} />
             <hr />
-            <SubmitSolution problem_title={problem.title} slug_problem={problem.name_slug} />
+            <SubmitSolution problem={problem} user={user} />
         </div>
-    );
+    )
 }
 
-export default Problem;
+export default Problem
