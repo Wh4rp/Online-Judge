@@ -6,99 +6,94 @@ const mongoose = require('mongoose')
 const problemSchema = new mongoose.Schema({
     id: Number,
     // Problem data for frontend
-    data: {
-        name: {
-            type: String,
-            required: [true, "Name is required"],
-            minlength: 3,
-            maxlength: 20,
-        },
-        name_slug: {
-            type: String,
-            required: [true, "Name slug is required"],
-            unique: true,
-        },
-        statement: {
-            main: {
-                type: String,
-                required: [true, "Statement is required"],
-            },
-            input: {
-                type: String,
-                required: [true, "Input is required"],
-            },
-            output: {
-                type: String,
-                required: [true, "Output is required"],
-            },
-            examples: {
-                type: [
-                    {
-                        id: {
-                            type: Number,
-                            required: [true, "Example id is required"],
-                        },
-                        input: {
-                            type: String,
-                            required: [true, "Example input is required"],
-                        },
-                        output: {
-                            type: String,
-                            required: [true, "Example output is required"],
-                        },
-                    }
-                ],
-                validate: v => v.length > 0,
-                message: "At least one example is required",
-                required: [true, "Examples are required"],
-            }
-        },
-        time_limit: {
-            type: Number,
-            required: [true, "Time limit is required"],
-        },
-        memory_limit: {
-            type: Number,
-            required: [true, "Memory limit is required"],
-        },
-        submissions: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Submission'
-
-        }]
+    name: {
+        type: String,
+        required: [true, "Name is required"],
+        minlength: 3,
+        maxlength: 20,
     },
-    // Checker data for backend
-    checker: {
-        custom: {
-            type: Boolean,
-            required: [true, "Custom checker is required"],
-            default: false,
-        },
-        checker: {
+    name_slug: {
+        type: String,
+        required: [true, "Name slug is required"],
+        unique: true,
+    },
+    statement: {
+        main: {
             type: String,
-            default: "",
+            required: [true, "Statement is required"],
         },
-        test_cases: {
+        input: {
+            type: String,
+            required: [true, "Input is required"],
+        },
+        output: {
+            type: String,
+            required: [true, "Output is required"],
+        },
+        examples: {
             type: [
                 {
                     id: {
                         type: Number,
-                        required: [true, "Test case id is required"],
+                        required: [true, "Example id is required"],
                     },
                     input: {
                         type: String,
-                        required: [true, "Test case input is required"],
+                        required: [true, "Example input is required"],
                     },
                     output: {
                         type: String,
-                        required: [true, "Test case output is required"],
-                    }
+                        required: [true, "Example output is required"],
+                    },
                 }
             ],
             validate: v => v.length > 0,
-            message: "At least one test case is required",
-            required: [true, "Test cases are required"],
+            message: "At least one example is required",
+            required: [true, "Examples are required"],
         }
+    },
+    time_limit: {
+        type: Number,
+        required: [true, "Time limit is required"],
+    },
+    memory_limit: {
+        type: Number,
+        required: [true, "Memory limit is required"],
+    },
+    submissions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Submission'
+    }],
+    // Checker data for backend
+    custom: {
+        type: Boolean,
+        required: [true, "Custom checker is required"],
+        default: false,
+    },
+    checker: {
+        type: String,
+        default: "",
+    },
+    test_cases: {
+        type: [
+            {
+                id: {
+                    type: Number,
+                    required: [true, "Test case id is required"],
+                },
+                input: {
+                    type: String,
+                    required: [true, "Test case input is required"],
+                },
+                output: {
+                    type: String,
+                    required: [true, "Test case output is required"],
+                }
+            }
+        ],
+        validate: v => v.length > 0,
+        message: "At least one test case is required",
+        required: [true, "Test cases are required"],
     }
 })
 
@@ -109,6 +104,9 @@ problemSchema.set('toJSON', {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
+        delete returnedObject.custom
+        delete returnedObject.checker
+        delete returnedObject.submissions
     }
 })
 

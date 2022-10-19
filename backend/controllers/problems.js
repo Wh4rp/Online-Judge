@@ -3,23 +3,23 @@ const Problem = require('../models/problem')
 
 problemsRouter.get('/', async (req, res) => {
     const problems = await Problem.find({})
-    res.json(problems.map(problem => problem.data))
+    console.log('problems', problems)
+    res.json(problems)
 })
 
 problemsRouter.get('/:slug', async (req, res, next) => {
-    const problem = await Problem.findOne({ 'data.name_slug': req.params.slug })
+    const problem = await Problem.findOne({ 'name_slug': req.params.slug })
     if (problem === null) {
         return response.status(401).json({
             error: 'invalid problem name'
         })
     }
-    res.json(problem.data)
+    res.json(problem)
 })
 
 problemsRouter.post('/', async (req, res, next) => {
-    const data = req.body.data
-    const checker = req.body.checker
-    const name_slug = data.name  // Slugify name
+    const body = req.body
+    const name_slug = body.name  // Slugify name
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^\w\s-]/g, '')
@@ -28,11 +28,8 @@ problemsRouter.post('/', async (req, res, next) => {
         .toLowerCase()
 
     const problem = new Problem({
-        data: {
-            ...data,
-            name_slug: name_slug
-        },
-        checker: checker
+        ...body,
+        name_slug: name_slug
     })
 
     const savedProblem = await problem.save()
@@ -40,7 +37,7 @@ problemsRouter.post('/', async (req, res, next) => {
 })
 
 problemsRouter.delete('/:slug', async (req, res, next) => {
-    const problem = await Problem.findOne({ 'data.name_slug': req.params.name_slug })
+    const problem = await Problem.findOne({ 'name_slug': req.params.name_slug })
     res.json(problem)
 })
 

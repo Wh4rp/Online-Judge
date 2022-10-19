@@ -26,7 +26,7 @@ const ProblemList = () => {
             </ul>
             <Outlet />
         </div>
-    );
+    )
 }
 
 export default ProblemList;
