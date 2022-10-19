@@ -1,3 +1,4 @@
+var uniqueValidator = require('mongoose-unique-validator')
 const mongoose = require('mongoose')
 
 // Define problem schema
@@ -6,15 +7,16 @@ const problemSchema = new mongoose.Schema({
     id: Number,
     // Problem data for frontend
     data: {
-        title: {
+        name: {
             type: String,
-            required: [true, "Title is required"],
+            required: [true, "Name is required"],
             minlength: 3,
             maxlength: 20,
         },
-        title_slug: {
+        name_slug: {
             type: String,
-            required: [true, "Title slug is required"],
+            required: [true, "Name slug is required"],
+            unique: true,
         },
         statement: {
             main: {
@@ -58,7 +60,12 @@ const problemSchema = new mongoose.Schema({
         memory_limit: {
             type: Number,
             required: [true, "Memory limit is required"],
-        }
+        },
+        submissions: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Submission'
+
+        }]
     },
     // Checker data for backend
     checker: {
@@ -104,6 +111,8 @@ problemSchema.set('toJSON', {
         delete returnedObject.__v
     }
 })
+
+problemSchema.plugin(uniqueValidator)
 
 // Export problem model
 

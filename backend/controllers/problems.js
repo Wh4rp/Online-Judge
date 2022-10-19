@@ -1,30 +1,25 @@
 const problemsRouter = require('express').Router()
 const Problem = require('../models/problem')
 
-problemsRouter.get('/', (req, res) => {
-    Problem.find({}).then(problems => {
-        res.json(problems.map(problem => problem.data)) // Only return data field
-    })
+problemsRouter.get('/', async (req, res) => {
+    const problems = await Problem.find({})
+    res.json(problems.map(problem => problem.data))
 })
 
-problemsRouter.get('/:slug', (req, res, next) => {
-    Problem.findOne({ "data.title_slug": req.params.slug })
-        .then(problem => {
-            if (problem) {
-                console.log(problem.data)
-                res.json(problem.data) // Only return data field
-            } else {
-                res.status(404).end()
-            }
+problemsRouter.get('/:slug', async (req, res, next) => {
+    const problem = await Problem.findOne({ 'data.name_slug': req.params.slug })
+    if (problem === null) {
+        return response.status(401).json({
+            error: 'invalid problem name'
         })
-        .catch(error => next(error))
+    }
+    res.json(problem.data)
 })
 
-problemsRouter.post('/', (req, res, next) => {
-    console.log('req.body', req.body)
+problemsRouter.post('/', async (req, res, next) => {
     const data = req.body.data
     const checker = req.body.checker
-    const title_slug = data.title  // Slugify title
+    const name_slug = data.name  // Slugify name
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^\w\s-]/g, '')
@@ -32,33 +27,21 @@ problemsRouter.post('/', (req, res, next) => {
         .replace(/^-+|-+$/g, '')
         .toLowerCase()
 
-    if (Problem.findOne({ "data.title_slug": title_slug }).length > 0) {
-        console.log('title_slug', title_slug)
-        return res.status(400).json({ error: "Problem already exists" })
-    }
-
     const problem = new Problem({
         data: {
             ...data,
-            title_slug: title_slug
+            name_slug: name_slug
         },
         checker: checker
     })
 
-    problem.save()
-        .then(savedProblem => {
-            console.log('Saved new problem: ', savedProblem.data.title)
-            res.json(savedProblem)
-        })
-        .catch(error => next(error))
+    const savedProblem = await problem.save()
+    res.json(savedProblem.data)
 })
 
-problemsRouter.delete('/:title_slug', (req, res, next) => {
-    Problem.findOneAndRemove({ "data.title_slug": req.params.title_slug })
-        .then(result => {
-            res.status(204).end()
-        })
-        .catch(error => next(error))
+problemsRouter.delete('/:slug', async (req, res, next) => {
+    const problem = await Problem.findOne({ 'data.name_slug': req.params.name_slug })
+    res.json(problem)
 })
 
 module.exports = problemsRouter

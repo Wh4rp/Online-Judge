@@ -155,7 +155,7 @@ const Problem = () => {
             <OutputProblem output={problem.statement.output} />
             <Examples examples={problem.statement.examples} />
             <hr />
-            <SubmitSolution problem_title={problem.title} slug_problem={problem.title_slug} />
+            <SubmitSolution problem_title={problem.title} slug_problem={problem.name_slug} />
         </div>
     );
 }

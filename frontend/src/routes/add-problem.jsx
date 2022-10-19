@@ -8,8 +8,8 @@ const AddProblemForm = () => {
     const navigate = useNavigate();
     const [problem, setProblem] = useState({
         data: {
-            title: "",
-            title_slug: "",
+            name: "",
+            name_slug: "",
             statement: {
                 main: "",
                 input: "",
