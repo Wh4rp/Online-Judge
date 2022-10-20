@@ -3,20 +3,17 @@ import {
     useEffect
 } from 'react'
 import login from '../services/auth/login'
+import { useDispatch, useSelector } from 'react-redux'
+import { login as loginAction } from '../reducers/userReducer'
 
 const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [user, setUser] = useState(null)
     const [message, setMessage] = useState(null)
 
-    useEffect(() => {
-        const loggedUserJSON = window.localStorage.getItem('loggedJudgeAppUser')
-        if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
-            setUser(user)
-        }
-    }, [])
+    const loggedIn = useSelector(state => state.user.loggedIn)
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch()
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -29,7 +26,9 @@ const Login = () => {
             window.localStorage.setItem(
                 'loggedJudgeAppUser', JSON.stringify(user)
             )
-            setUser(user)
+            dispatch(loginAction({
+                username: user.username,
+            }))
             setUsername('')
             setPassword('')
         } catch (exception) {
@@ -77,9 +76,9 @@ const Login = () => {
     return (
         <div>
             <h1>Login</h1>
-            {user === null ? loginForm() : `You are ready logged in as ${user.username}`}
+            {loggedIn ? `You are ready logged in as ${user.username}` : loginForm()}
         </div>
-    );
+    )
 }
 
 export default Login

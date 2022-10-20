@@ -21,14 +21,17 @@ const problemSchema = new mongoose.Schema({
         main: {
             type: String,
             required: [true, "Statement is required"],
+            minlength: 10,
         },
         input: {
             type: String,
             required: [true, "Input is required"],
+            minlength: 5,
         },
         output: {
             type: String,
             required: [true, "Output is required"],
+            minlength: 5,
         },
         examples: {
             type: [

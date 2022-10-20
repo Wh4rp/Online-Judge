@@ -7,6 +7,19 @@ import {
   Route,
 } from "react-router-dom"
 
+// Import redux libraries
+import { configureStore } from '@reduxjs/toolkit'
+import { Provider } from 'react-redux'
+
+// Import the reducer
+import userReducer from './reducers/userReducer'
+
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+  }
+})
+
 // Import stylesheets
 import './index.css'
 
@@ -82,6 +95,8 @@ const router = createBrowserRouter([
 // Render the router
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 )

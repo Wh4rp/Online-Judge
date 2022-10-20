@@ -42,7 +42,8 @@ submissionsRouter.post('/', async (req, res, next) => {
     }
 
     const user = await User.findById(decodedToken.id)
-    const problem = await Problem.findOne({ 'data.name_slug': body.problem_name_slug })
+    console.log('user', user)
+    const problem = await Problem.findOne({ 'name_slug': body.problem_name_slug })
     console.log('problem', problem)
     if (!(user && problem)) {
         return res.status(400).json({
@@ -62,14 +63,17 @@ submissionsRouter.post('/', async (req, res, next) => {
         memory_execution: 0,
     })
 
+    console.log('submission', submission)
+
     const submissionSaved = await submission.save()
     user.submissions = user.submissions.concat(submissionSaved._id)
     await user.save()
-    problem.submissions = problem.data.submissions.concat(submissionSaved._id)
-    const savedSubmission = await problem.save()
+    problem.submissions = problem.submissions.concat(submissionSaved._id)
+    const problemSaved = await problem.save()
 
-    checker(savedSubmission, problem)
-    res.json(savedSubmission)
+    checker(submission, problem)
+
+    res.status(201).json(submissionSaved)
 })
 
 module.exports = submissionsRouter

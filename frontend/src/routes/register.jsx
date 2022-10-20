@@ -3,6 +3,8 @@ import {
 } from 'react';
 import { useNavigate } from 'react-router-dom'
 import register from '../services/auth/register'
+import { useDispatch, useSelector } from 'react-redux'
+import { login as loginAction } from "../reducers/userReducer"
 import login from '../services/auth/login'
 
 const Register = () => {
@@ -10,6 +12,10 @@ const Register = () => {
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(null)
+
+    const loggedIn = useSelector(state => state.user.loggedIn)
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -25,9 +31,12 @@ const Register = () => {
             window.localStorage.setItem(
                 'loggedJudgeAppUser', JSON.stringify(user)
             )
-            useNavigate('/')
+            dispatch(loginAction({
+                username: user.username,
+            }))
         }
         catch (error) {
+            console.log('error', error)
             setError('Wrong credentials')
 
             setTimeout(() => {
@@ -36,31 +45,35 @@ const Register = () => {
         }
     }
 
+    const registerForm = () => (
+        <form onSubmit={handleSubmit}>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Username:</td>
+                        <td><input type="text" value={username} onChange={({ target }) => setUsername(target.value)} /></td>
+                    </tr>
+                    <tr>
+                        <td>Name:</td>
+                        <td><input type="text" value={name} onChange={({ target }) => setName(target.value)} /></td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                        <td><input type="password" value={password} onChange={({ target }) => setPassword(target.value)} /></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="submit">Register</button>
+        </form>
+    )
+
     return (
         <>
             <h1>Register</h1>
             {error && <p>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Username:</td>
-                            <td><input type="text" value={username} onChange={({ target }) => setUsername(target.value)} /></td>
-                        </tr>
-                        <tr>
-                            <td>Name:</td>
-                            <td><input type="text" value={name} onChange={({ target }) => setName(target.value)} /></td>
-                        </tr>
-                        <tr>
-                            <td>Password:</td>
-                            <td><input type="password" value={password} onChange={({ target }) => setPassword(target.value)} /></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button type="submit">Register</button>
-            </form>
+            {loggedIn ? <p>{user.username} is logged in</p> : registerForm()}
         </>
-    );
+    )
 }
 
 export default Register

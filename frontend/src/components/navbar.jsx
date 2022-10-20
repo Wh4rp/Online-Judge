@@ -4,55 +4,59 @@ import {
 } from 'react'
 import React from 'react'
 import { Link } from "react-router-dom"
+
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../reducers/userReducer'
+
 import './navbar.css'
 
 const NavBar = () => {
-    const [user, setUser] = useState(null)
+    const loggedIn = useSelector(state => state.user.loggedIn)
+    const user = useSelector(state => state.user)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedJudgeAppUser')
         if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
-            setUser(user)
+            console.log('find')
+            const userJSON = JSON.parse(loggedUserJSON)
+            dispatch(login(userJSON))
         }
+        console.log('user', user)
+        console.log('loggedIn', loggedIn)
     }, [])
 
     return (
         <div id="navbar">
-            <div className='navbar-item'>
-                <Link to='/'>Home</Link>
+            <div className='navbar-left-container'>
+                <div className='navbar-item'>
+                    <Link to='/'>Home</Link>
+                </div>
+                <div className='navbar-item'>
+                    <Link to='/problems'>Problems</Link>
+                </div>
+                <div className='navbar-item'>
+                    <Link to='/add_problem'>Add Problem</Link>
+                </div>
+                <div className='navbar-item'>
+                    <Link to='/submissions'>Submissions</Link>
+                </div>
             </div>
-            <div className='navbar-item'>
-                <Link to='/problems'>Problems</Link>
-            </div>
-            <div className='navbar-item'>
-                <Link to='/add_problem'>Add Problem</Link>
-            </div>
-            <div className='navbar-item'>
-                <Link to='/submissions'>Submissions</Link>
-            </div>
-            {user === null ? (
-                <>
-                    <div className='navbar-item-right'>
-                        <Link to='/login'>Login</Link>
-                    </div>
-                    <div className='navbar-item-right'>
-                        <Link to='/register'>Register</Link>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <div className='navbar-item-right'>
-                        {user.username}
-                    </div>
-                    <div className='navbar-item-right'>
-                        <Link to='/logout'>Logout</Link>
-                    </div>
-                </>
-            )}
 
+            <div className='navbar-right-container'>
+                <div className='navbar-item'>
+                    {loggedIn ? user.username : <Link to='/login'>Login</Link>}
+                </div>
+                <div className='navbar-item'>
+                    {loggedIn ?
+                        <Link to='/logout'>Logout</Link>
+                        :
+                        <Link to='/register'>Register</Link>
+                    }
+                </div>
+            </div>
         </div>
-    );
+    )
 }
 
 export default NavBar;

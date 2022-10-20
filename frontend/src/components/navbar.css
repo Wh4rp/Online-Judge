@@ -7,9 +7,14 @@
 #navbar .navbar-item {
     margin: 0 10px;
     height: 100%;
-    cursor: pointer;
 }
 
-#navbar .navbar-item-right {
+#navbar .navbar-left-container {
+    display: flex;
+    margin-right: auto;
+}
+
+#navbar .navbar-right-container {
+    display: flex;
     margin-left: auto;
 }

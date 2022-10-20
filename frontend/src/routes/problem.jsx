@@ -3,20 +3,20 @@ import {
     Link,
     useLoaderData,
     useNavigate,
-} from "react-router-dom";
+} from "react-router-dom"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"
 
 import RenderMD from '../components/rendermd'
 
-import { getBySlug } from "../services/problems";
+import { getBySlug } from "../services/problems"
 
-import './problem.css';
+import './problem.css'
 
-import { createSubmission, setToken } from "../services/submissions";
+import { createSubmission, setToken } from "../services/submissions"
 
 export function loader({ params }) {
-    return getBySlug(params.problemSlug);
+    return getBySlug(params.problemSlug)
 }
 
 const DescriptionProblem = ({ description }) => {
@@ -24,7 +24,7 @@ const DescriptionProblem = ({ description }) => {
         <div className="description">
             <RenderMD source={description} />
         </div>
-    );
+    )
 }
 
 const InputProblem = ({ input }) => {
@@ -33,7 +33,7 @@ const InputProblem = ({ input }) => {
             <h2>Input</h2>
             <RenderMD source={input} />
         </>
-    );
+    )
 }
 
 const OutputProblem = ({ output }) => {
@@ -42,7 +42,7 @@ const OutputProblem = ({ output }) => {
             <h2>Output</h2>
             <RenderMD source={output} />
         </>
-    );
+    )
 }
 
 const Examples = ({ examples }) => {
@@ -64,7 +64,7 @@ const Examples = ({ examples }) => {
                 ))}
             </ul>
         </div>
-    );
+    )
 }
 
 const Constraints = ({ time_limit, memory_limit }) => {
@@ -75,33 +75,34 @@ const Constraints = ({ time_limit, memory_limit }) => {
                 <li><b>Memory limit</b>: {memory_limit}MB</li>
             </ul>
         </div>
-    );
+    )
 }
 
 const SubmitSolution = ({ problem, user }) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     const [submission, setSubmission] = useState({
         code: '',
+        user_id: user ? user.id : null,
         language: 'c',
         problem_name_slug: problem.name_slug,
-    });
+    })
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         createSubmission(submission)
             .then((res) => {
                 console.log('response', res)
-                navigate(`/submissions`);
+                navigate(`/submissions`)
             })
     }
 
     const handleChange = (e) => {
-        console.log(submission);
+        console.log(submission)
         setSubmission({
             ...submission,
             [e.target.name]: e.target.value,
-        });
+        })
     }
 
     return (
@@ -140,19 +141,20 @@ const SubmitSolution = ({ problem, user }) => {
                 </table>
             </form>
         </div>
-    );
+    )
 }
 
 const Problem = () => {
-    const problem = useLoaderData();
+    const problem = useLoaderData()
     const [user, setUser] = useState(null)
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedJudgeAppUser')
         if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
-            setUser(user)
-            setToken(user.token)
+            console.log('logged user', loggedUserJSON)
+            const userJSON = JSON.parse(loggedUserJSON)
+            setUser(userJSON)
+            setToken(userJSON.token)
         }
     }, [])
 

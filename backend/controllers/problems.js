@@ -29,11 +29,28 @@ problemsRouter.post('/', async (req, res, next) => {
 
     const problem = new Problem({
         ...body,
-        name_slug: name_slug
+        name_slug: name_slug,
+        statement: {
+            ...body.statement,
+            examples: body.statement.examples.map(example => {
+                return {
+                    id: example.id,
+                    input: example.input.endsWith('\n') ? example.input : example.input + '\n',
+                    output: example.output.endsWith('\n') ? example.output : example.output + '\n'
+                }
+            })
+        },
+        test_cases: body.test_cases.map(test_case => {
+            return {
+                id: test_case.id,
+                input: test_case.input.endsWith('\n') ? test_case.input : test_case.input + '\n',
+                output: test_case.output.endsWith('\n') ? test_case.output : test_case.output + '\n'
+            }
+        })
     })
 
     const savedProblem = await problem.save()
-    res.json(savedProblem.data)
+    res.json(savedProblem)
 })
 
 problemsRouter.delete('/:slug', async (req, res, next) => {
