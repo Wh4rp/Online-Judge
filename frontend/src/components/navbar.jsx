@@ -8,6 +8,8 @@ import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../reducers/userReducer'
 
+import Logo from '../../public/JuezOnline.svg'
+
 import './navbar.css'
 
 const NavBar = () => {
@@ -29,8 +31,10 @@ const NavBar = () => {
     return (
         <div id="navbar">
             <div className='navbar-left-container'>
-                <div className='navbar-item'>
-                    <Link to='/'>Home</Link>
+                <div className='navbar-logo'>
+                    <Link to='/'>
+                        <img src={Logo} alt="Logo" />
+                    </Link>
                 </div>
                 <div className='navbar-item'>
                     <Link to='/problems'>Problems</Link>

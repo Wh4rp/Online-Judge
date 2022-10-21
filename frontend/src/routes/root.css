@@ -1,0 +1,39 @@
+#banner-title {
+    text-align: center;
+}
+
+#banner-subtitle {
+    text-align: center;
+}
+
+#banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#banner-carts-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-cart-item {
+    margin: 10px 10px;
+    padding: 20px 20px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    height: 110px;
+}
+
+.banner-cart-button {
+    margin: 10px 10px;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    background-color: #000;
+    color: #fff;
+}
