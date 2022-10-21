@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../reducers/userReducer'
 
-import Logo from '../../public/JuezOnline.svg'
+import Logo from '/JuezOnline.svg'
 
 import './navbar.css'
 

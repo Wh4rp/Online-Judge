@@ -1,6 +1,6 @@
 import './root.css'
 
-import bannerImage from '../../public/banner.jpeg'
+import bannerImage from '/banner.jpeg'
 
 const Root = () => {
     return (
