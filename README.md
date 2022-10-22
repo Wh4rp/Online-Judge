@@ -1,14 +1,43 @@
 # Online Judge
 
-This is a online judge full stack project.
+This is a online judge. It is a web application that allows users to submit solutions to programming problems and view the results of their submissions. It is a full-stack web application that uses the following technologies:
 
-Frontend made with React and Vite. Backend with Node.js and Express.
+- [Express](https://expressjs.com/) (server-side)
+- [MongoDB](https://www.mongodb.com/) (database)
+- [React](https://reactjs.org/) (client-side)
+- [Vite](https://vitejs.dev/) (build tool)
 
-Deployed with fly.io on <https://onlinejudge.fly.dev>.
+## Installation
 
-## Features to implement
+Clone the repository and install the dependencies for the server and client.
 
-- [ ] User system
-- [ ] Problem system
-- [ ] Contest system
-- [ ] Submission system
+```bash
+git clone https://github.com/Wh4rp/Online-Judge.git
+cd Online-Judge
+cd backend && npm install
+cd ../frontend && npm install
+```
+
+### Environment Variables
+
+Create a `.env` file in the `backend` directory and add the following variables.
+
+```bash
+PORT=3000
+SECRET=<secret-key-for-jwt>
+MONGO_URI=<mongodb-connection-string>
+```
+
+- `PORT` is the port that the server will run on.
+
+- `SECRET` can be any string, I used [this page](https://www.javainuse.com/jwtgenerator) to generate a random string.
+
+- `MONGO_URI` can be obtained from [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+
+### Build and Run
+
+```bash
+cd backend
+npm run build:ui
+npm run dev
+```
