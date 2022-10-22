@@ -5,6 +5,13 @@ import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+      },
+    },
+  },
   resolve: {
     alias: [
       { find: '@', replacement: resolve(__dirname, 'src') },
