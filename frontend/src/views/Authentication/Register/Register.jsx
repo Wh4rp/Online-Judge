@@ -1,11 +1,9 @@
-import {
-    useState
-} from 'react';
-import { useNavigate } from 'react-router-dom'
-import register from '../services/auth/register'
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { login as loginAction } from "../reducers/userReducer"
-import login from '../services/auth/login'
+
+import register from '@services/auth/register'
+import login from '@services/auth/login'
+import { login as loginAction } from "@store/authentication"
 
 const Register = () => {
     const [username, setUsername] = useState('')

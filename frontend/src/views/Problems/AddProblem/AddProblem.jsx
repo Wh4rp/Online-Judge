@@ -1,8 +1,8 @@
-import { create } from "../services/problems"
-import { useState, useEffect } from "react"
+import { createProblem } from '@services/problems'
+import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
 
-import './add_problem.css'
+import './AddProblem.css'
 
 const AddProblemForm = () => {
     const navigate = useNavigate()
@@ -69,7 +69,7 @@ const AddProblemForm = () => {
             checker,
             test_cases
         }
-        create(newProblem)
+        createProblem(newProblem)
             .then(res => {
                 console.log(res)
                 navigate('/problems')

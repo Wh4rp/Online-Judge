@@ -1,8 +1,8 @@
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import rehypeRaw from "rehype-raw";
+import rehypeRaw from "rehype-raw"
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 
@@ -34,7 +34,7 @@ const RenderMD = ({ source } ) => {
             remarkPlugins={[remarkGfm, remarkMath]}
             rehypePlugins={[rehypeRaw, rehypeKatex]}
         />
-    );
+    )
 }
 
-export default RenderMD;
+export default RenderMD

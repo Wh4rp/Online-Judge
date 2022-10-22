@@ -1,11 +1,9 @@
-import {
-    useEffect
-} from 'react'
+import { useEffect } from 'react'
 
 import { useDispatch } from 'react-redux'
-import {logout as logoutAction} from "../reducers/userReducer"
+import { logout as logoutAction } from '@store/authentication'
 
-import logout from '../services/auth/logout'
+import logout from '@services/auth/logout'
 
 const Logout = () => {
     const dispatch = useDispatch()

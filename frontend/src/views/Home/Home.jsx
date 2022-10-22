@@ -1,10 +1,12 @@
-import './root.css'
+import { Link } from "react-router-dom"
+
+import './Home.css'
 
 import bannerImage from '/banner.jpeg'
 
-const Root = () => {
+const Home = () => {
     return (
-        <div className='root-container'>
+        <div className='home-container'>
             <h2 id="banner-subtitle">
                 Bienvenido a Juez Online
             </h2>
@@ -17,29 +19,29 @@ const Root = () => {
                     <h3 className="banner-cart-title">
                         Olimpiada de Chilena de Informática
                     </h3>
-                    <a href="/problems" className="banner-cart-button">
-                        Ver problemas
-                    </a>
+                    <Link to="/problems" className="banner-cart-button">
+                        Ver problema
+                    </Link>
                 </div>
                 <div className="banner-cart-item">
                     <h3 className="banner-cart-title">
                         Para comenzar
                     </h3>
-                    <a href="/problems" className="banner-cart-button">
-                        Ver problemas
-                    </a>
+                    <Link to="/problems" className="banner-cart-button">
+                        Ver problema
+                    </Link>
                 </div>
                 <div className="banner-cart-item">
                     <h3 className="banner-cart-title">
                         Problema de la semana
                     </h3>
-                    <a href="/problems" className="banner-cart-button">
-                        Ver problemas
-                    </a>
+                    <Link to="/problems" className="banner-cart-button">
+                        Ver problema
+                    </Link>
                 </div>
             </div>
         </div>
     )
 }
 
-export default Root;
+export default Home

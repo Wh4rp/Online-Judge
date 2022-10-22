@@ -1,17 +1,10 @@
 import {
-    Outlet,
     Link,
     useLoaderData,
-} from "react-router-dom";
-import { getAllSubmissions } from "../services/submissions";
-
-export async function loader() {
-    const submissions = await getAllSubmissions();
-    return { submissions };
-}
+} from "react-router-dom"
 
 const SubmissionList = () => {
-    const { submissions } = useLoaderData();
+    const submissions = useLoaderData()
     return (
         <div>
             <h1>Submissions</h1>
@@ -34,9 +27,8 @@ const SubmissionList = () => {
                     ))}
                 </tbody>
             </table>
-            <Outlet />
         </div>
-    );
+    )
 }
 
 const SubmissionItem = ({ id, problem_title, problem_slug, submission_time, language, status, global_verdict }) => {
@@ -53,7 +45,7 @@ const SubmissionItem = ({ id, problem_title, problem_slug, submission_time, lang
                 <Link to={`/submissions/${id}/`}>Details</Link>
             </td>
         </>
-    );
+    )
 }
 
-export default SubmissionList;
+export default SubmissionList

@@ -1,8 +1,8 @@
 const problemsRouter = require('express').Router()
 const Problem = require('../models/problem')
 
-import { slugify } from '../helpers/slugify'
-import { endline_tests } from '../helpers/endline_tests'
+const slugify = require('../helpers/slugify')
+const endline_tests = require('../helpers/endline_tests')
 
 problemsRouter.get('/', async (req, res) => {
     const problems = await Problem.find({})

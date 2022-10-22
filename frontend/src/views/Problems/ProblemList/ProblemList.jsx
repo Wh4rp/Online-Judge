@@ -1,17 +1,10 @@
 import {
-    Outlet,
     Link,
     useLoaderData,
-} from "react-router-dom";
-import { getAll } from "../services/problems";
-
-export async function loader() {
-    const problems = await getAll();
-    return { problems };
-}
+} from "react-router-dom"
 
 const ProblemList = () => {
-    const { problems } = useLoaderData();
+    const problems = useLoaderData()
     return (
         <div>
             <h1>Problems</h1>
@@ -24,9 +17,8 @@ const ProblemList = () => {
                     </li>
                 ))}
             </ul>
-            <Outlet />
         </div>
     )
 }
 
-export default ProblemList;
+export default ProblemList

@@ -1,10 +1,8 @@
-import {
-    useState,
-    useEffect
-} from 'react'
-import login from '../services/auth/login'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { login as loginAction } from '../reducers/userReducer'
+
+import login from '@services/auth/login'
+import { login as loginAction } from '@store/authentication'
 
 const Login = () => {
     const [username, setUsername] = useState('')

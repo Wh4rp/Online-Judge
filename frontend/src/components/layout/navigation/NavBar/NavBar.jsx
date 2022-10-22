@@ -1,16 +1,13 @@
-import {
-    useState,
-    useEffect
-} from 'react'
 import React from 'react'
+import { useEffect } from 'react'
 import { Link } from "react-router-dom"
 
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from '../reducers/userReducer'
+import { login } from '@store/authentication'
 
 import Logo from '/JuezOnline.svg'
 
-import './navbar.css'
+import './NavBar.css'
 
 const NavBar = () => {
     const loggedIn = useSelector(state => state.user.loggedIn)
@@ -63,4 +60,4 @@ const NavBar = () => {
     )
 }
 
-export default NavBar;
+export default NavBar

@@ -1,26 +1,18 @@
 import {
-    Outlet,
     Link,
     useLoaderData,
-} from "react-router-dom";
-import { getSubmission } from "../services/submissions";
-
-export async function loader({ params }) {
-    const submission = await getSubmission(params.submissionId);
-    return { submission };
-}
+} from "react-router-dom"
 
 const Submission = () => {
-    const { submission } = useLoaderData();
+    const submission = useLoaderData()
     return (
         <div>
             <h1>Submission {submission.id}</h1>
             <CodeSubmission code={submission.code} />
             <SubmissionInfo submission={submission} />
             <SubmissionTestCases verdicts={submission.verdicts} />
-            <Outlet />
         </div>
-    );
+    )
 }
 
 const CodeSubmission = ({ code }) => {
@@ -31,7 +23,7 @@ const CodeSubmission = ({ code }) => {
                 {code}
             </pre>
         </>
-    );
+    )
 }
 
 const SubmissionInfo = ({ submission }) => {
@@ -46,7 +38,7 @@ const SubmissionInfo = ({ submission }) => {
                 <li>Memory: {submission.memory_execution}</li>
             </ul>
         </>
-    );
+    )
 }
 
 const SubmissionTestCases = ({ verdicts }) => {
@@ -69,7 +61,7 @@ const SubmissionTestCases = ({ verdicts }) => {
                 </tbody>
             </table>
         </>
-    );
+    )
 }
 
 const SubmitTestCaseVerdict = ({ verdict }) => {
@@ -80,7 +72,7 @@ const SubmitTestCaseVerdict = ({ verdict }) => {
             <td>{verdict.time_execution}</td>
             <td>{verdict.memory_execution}</td>
         </tr>
-    );
+    )
 }
 
-export default Submission;
+export default Submission

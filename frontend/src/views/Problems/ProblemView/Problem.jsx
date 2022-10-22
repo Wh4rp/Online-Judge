@@ -1,23 +1,15 @@
 import {
-    Outlet,
-    Link,
     useLoaderData,
     useNavigate,
 } from "react-router-dom"
 
 import { useState, useEffect } from "react"
 
-import RenderMD from '../components/rendermd'
+import RenderMD from '@components/render-md'
 
-import { getBySlug } from "../services/problems"
+import './Problem.css'
 
-import './problem.css'
-
-import { createSubmission, setToken } from "../services/submissions"
-
-export function loader({ params }) {
-    return getBySlug(params.problemSlug)
-}
+import { createSubmission, setToken } from "@services/submissions"
 
 const DescriptionProblem = ({ description }) => {
     return (
