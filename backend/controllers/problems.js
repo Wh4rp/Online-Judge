@@ -1,30 +1,25 @@
 const problemsRouter = require('express').Router()
 const Problem = require('../models/problem')
 
-problemsRouter.get('/', (req, res) => {
-    Problem.find({}).then(problems => {
-        res.json(problems.map(problem => problem.data)) // Only return data field
-    })
+problemsRouter.get('/', async (req, res) => {
+    const problems = await Problem.find({})
+    console.log('problems', problems)
+    res.json(problems)
 })
 
-problemsRouter.get('/:slug', (req, res, next) => {
-    Problem.findOne({ "data.title_slug": req.params.slug })
-        .then(problem => {
-            if (problem) {
-                console.log(problem.data)
-                res.json(problem.data) // Only return data field
-            } else {
-                res.status(404).end()
-            }
+problemsRouter.get('/:slug', async (req, res, next) => {
+    const problem = await Problem.findOne({ 'name_slug': req.params.slug })
+    if (problem === null) {
+        return response.status(401).json({
+            error: 'invalid problem name'
         })
-        .catch(error => next(error))
+    }
+    res.json(problem)
 })
 
-problemsRouter.post('/', (req, res, next) => {
-    console.log('req.body', req.body)
-    const data = req.body.data
-    const checker = req.body.checker
-    const title_slug = data.title  // Slugify title
+problemsRouter.post('/', async (req, res, next) => {
+    const body = req.body
+    const name_slug = body.name  // Slugify name
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^\w\s-]/g, '')
@@ -32,33 +27,35 @@ problemsRouter.post('/', (req, res, next) => {
         .replace(/^-+|-+$/g, '')
         .toLowerCase()
 
-    if (Problem.findOne({ "data.title_slug": title_slug }).length > 0) {
-        console.log('title_slug', title_slug)
-        return res.status(400).json({ error: "Problem already exists" })
-    }
-
     const problem = new Problem({
-        data: {
-            ...data,
-            title_slug: title_slug
+        ...body,
+        name_slug: name_slug,
+        statement: {
+            ...body.statement,
+            examples: body.statement.examples.map(example => {
+                return {
+                    id: example.id,
+                    input: example.input.endsWith('\n') ? example.input : example.input + '\n',
+                    output: example.output.endsWith('\n') ? example.output : example.output + '\n'
+                }
+            })
         },
-        checker: checker
+        test_cases: body.test_cases.map(test_case => {
+            return {
+                id: test_case.id,
+                input: test_case.input.endsWith('\n') ? test_case.input : test_case.input + '\n',
+                output: test_case.output.endsWith('\n') ? test_case.output : test_case.output + '\n'
+            }
+        })
     })
 
-    problem.save()
-        .then(savedProblem => {
-            console.log('Saved new problem: ', savedProblem.data.title)
-            res.json(savedProblem)
-        })
-        .catch(error => next(error))
+    const savedProblem = await problem.save()
+    res.json(savedProblem)
 })
 
-problemsRouter.delete('/:title_slug', (req, res, next) => {
-    Problem.findOneAndRemove({ "data.title_slug": req.params.title_slug })
-        .then(result => {
-            res.status(204).end()
-        })
-        .catch(error => next(error))
+problemsRouter.delete('/:slug', async (req, res, next) => {
+    const problem = await Problem.findOne({ 'name_slug': req.params.name_slug })
+    res.json(problem)
 })
 
 module.exports = problemsRouter

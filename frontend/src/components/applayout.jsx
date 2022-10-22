@@ -6,12 +6,11 @@ import './applayout.css';
 
 const AppLayout = () => (
   <>
+    <NavBar />
     <div className="skeleton">
-      <NavBar />
       <Outlet />
     </div>
   </>
-
 );
 
 export default AppLayout;

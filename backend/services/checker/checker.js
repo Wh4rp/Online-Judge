@@ -189,9 +189,9 @@ const checker_cpp = async (submission, problem) => {
     // If compilation succeeded
 
     // Get checker data
-    const custom = problem.checker.custom
-    const checker = problem.checker.checker
-    const test_cases = problem.checker.test_cases
+    const custom = problem.custom
+    const checker = problem.checker
+    const test_cases = problem.test_cases
 
     // Create run command
     const command = `./services/checker/tmp/run.out`
@@ -212,9 +212,9 @@ const checker_python = async (submission, problem) => {
     const command = `python ./services/checker/tmp/run.py`
 
     // Get checker data
-    const custom = problem.checker.custom
-    const checker = problem.checker.checker
-    const test_cases = problem.checker.test_cases
+    const custom = problem.custom
+    const checker = problem
+    const test_cases = problem.test_cases
 
     // Run each test case
     const verdict = await checkSubmission(command, custom, checker, test_cases)
@@ -241,8 +241,10 @@ const global_verdict = (verdicts) => {
 }
 
 const checker = async (submission, problem) => {
+    console.log('checker')
     // Get submission language data
     const language = submission.language
+    console.log('language', language)
     let verdicts = []
     if (language === 'cpp') {
         verdicts = await checker_cpp(submission, problem)

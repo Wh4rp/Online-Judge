@@ -15,16 +15,15 @@ const submissionSchema = new mongoose.Schema({
         enum: ['c', 'cpp', 'java', 'python'],
         required: [true, "Language is required"],
     },
-    problem_title: {
-        type: String,
-        required: [true, "Problem title is required"],
+    problem: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Problem',
+        required: [true, "Problem is required"],
     },
-    problem_slug: {
-        type: String,
-        required: [true, "Problem slug is required"],
-    },
-    checker: {
-        type: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true, "User is required"],
     },
     status: {
         type: String,

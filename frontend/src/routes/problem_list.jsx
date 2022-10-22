@@ -18,15 +18,15 @@ const ProblemList = () => {
             <ul>
                 {problems.map((problem) => (
                     <li key={problem.id}>
-                        <Link to={`/problems/${problem.title_slug}`}>
-                            {problem.title}
+                        <Link to={`/problems/${problem.name_slug}`}>
+                            {problem.name}
                         </Link>
                     </li>
                 ))}
             </ul>
             <Outlet />
         </div>
-    );
+    )
 }
 
 export default ProblemList;
