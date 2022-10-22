@@ -1,6 +1,9 @@
 const problemsRouter = require('express').Router()
 const Problem = require('../models/problem')
 
+import { slugify } from '../helpers/slugify'
+import { endline_tests } from '../helpers/endline_tests'
+
 problemsRouter.get('/', async (req, res) => {
     const problems = await Problem.find({})
     console.log('problems', problems)
@@ -19,34 +22,16 @@ problemsRouter.get('/:slug', async (req, res, next) => {
 
 problemsRouter.post('/', async (req, res, next) => {
     const body = req.body
-    const name_slug = body.name  // Slugify name
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^\w\s-]/g, '')
-        .replace(/[\s_-]+/g, '-')
-        .replace(/^-+|-+$/g, '')
-        .toLowerCase()
+    const name_slug = slugify(body.name)
 
     const problem = new Problem({
         ...body,
         name_slug: name_slug,
         statement: {
             ...body.statement,
-            examples: body.statement.examples.map(example => {
-                return {
-                    id: example.id,
-                    input: example.input.endsWith('\n') ? example.input : example.input + '\n',
-                    output: example.output.endsWith('\n') ? example.output : example.output + '\n'
-                }
-            })
+            examples: endline_tests(body.statement.examples)
         },
-        test_cases: body.test_cases.map(test_case => {
-            return {
-                id: test_case.id,
-                input: test_case.input.endsWith('\n') ? test_case.input : test_case.input + '\n',
-                output: test_case.output.endsWith('\n') ? test_case.output : test_case.output + '\n'
-            }
-        })
+        test_cases: endline_tests(body.test_cases)
     })
 
     const savedProblem = await problem.save()
