@@ -109,7 +109,6 @@ problemSchema.set('toJSON', {
         delete returnedObject.__v
         delete returnedObject.custom
         delete returnedObject.checker
-        delete returnedObject.submissions
     }
 })
 

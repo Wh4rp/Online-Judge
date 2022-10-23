@@ -3,20 +3,39 @@ import {
     useLoaderData,
 } from "react-router-dom"
 
+import './ProblemList.css'
+
 const ProblemList = () => {
     const problems = useLoaderData()
     return (
-        <div>
+        <>
             <h1>Problems</h1>
-            <ul>
+            <div id="problem-list">
+                <div id="problem-list-header">
+                    <div id="problem-list-header__title">Title</div>
+                    <div id="problem-list-header__submissions">Submissions</div>
+                </div>
                 {problems.map((problem) => (
-                    <li key={problem.id}>
-                        <Link to={`/problems/${problem.name_slug}`}>
-                            {problem.name}
-                        </Link>
-                    </li>
+                    ProblemItem(problem)
                 ))}
-            </ul>
+            </div>
+        </>
+    )
+}
+
+const ProblemItem = (problem) => {
+
+    return (
+        <div className="problem-item" key={problem.id}>
+            <div className="vertical-line"/>
+            <div className="problem-item__title">
+                <Link to={`/problems/${problem.name_slug}`}>
+                    {problem.name}
+                </Link>
+            </div>
+            <div className="problem-item__submissions">
+                {problem.submissions.length}
+            </div>
         </div>
     )
 }

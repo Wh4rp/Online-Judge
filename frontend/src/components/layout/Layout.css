@@ -1,4 +1,15 @@
+* {
+	font-family: 'Open Sans', sans-serif;
+}
+
 .skeleton {
+	padding-bottom: 40px;
 	max-width: 960px;
 	margin: 0 auto;
+}
+
+#page-container {
+	position: relative;
+	min-height: 100vh;
+	background-color: #fff7f7;
 }

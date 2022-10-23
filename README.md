@@ -1,6 +1,6 @@
 # Online Judge
 
-This is a online judge. It is a web application that allows users to submit solutions to programming problems and view the results of their submissions. It is a full-stack web application that uses the following technologies:
+This is a online judge. It is a web application that allows users to submit solutions to [programming problems](https://en.wikipedia.org/wiki/Competitive_programming) and view the results of their submissions. It is a full-stack web application that uses the following technologies:
 
 - [Express](https://expressjs.com/) (server-side)
 - [MongoDB](https://www.mongodb.com/) (database)
