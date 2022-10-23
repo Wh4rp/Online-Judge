@@ -12,7 +12,7 @@ const ProblemList = () => {
             <h1>Problems</h1>
             <div id="problem-list">
                 <div id="problem-list-header">
-                    <div id="problem-list-header__title">Title</div>
+                    <div id="problem-list-header__title">Name</div>
                     <div id="problem-list-header__submissions">Submissions</div>
                 </div>
                 {problems.map((problem) => (
