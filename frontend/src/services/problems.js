@@ -2,29 +2,29 @@ import axios from 'axios'
 
 const baseUrl = '/api/problems'
 
-const getAll = async () => {
+const getAllProblems = async () => {
     const request = axios.get(baseUrl)
     return request.then(response => response.data)
 }
 
-const getBySlug = async (slug) => {
+const getBySlugProblem = async (slug) => {
     const request = axios.get(`${baseUrl}/${slug}`)
     return request.then(response => response.data)
 }
 
-const create = async newObject => {
+const createProblem = async newObject => {
     const request = axios.post(baseUrl, newObject)
     return request.then(response => response.data)
 }
 
-const update = async (id, newObject) => {
+const updateProblem = async (id, newObject) => {
     const request = axios.put(`${baseUrl}/${id}`, newObject)
     return request.then(response => response.data)
 }
 
-const deleteObject = async (id) => {
+const deleteProblem = async (id) => {
     const request = axios.delete(`${baseUrl}/${id}`)
     return request
 }
 
-export { getAll, getBySlug, create, update, deleteObject }
+export { getAllProblems, getBySlugProblem, createProblem, updateProblem, deleteProblem }

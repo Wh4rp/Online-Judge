@@ -6,7 +6,7 @@ const setToken = newToken => {
     token = `bearer ${newToken}`
 }
 
-const getSubmission = async id => {
+const getByIdSubmission = async id => {
     const request = axios.get(`${baseUrl}/${id}`)
     return request.then(response => response.data)
 }
@@ -24,4 +24,4 @@ const createSubmission = async newObject => {
     return request.then(response => response.data)
 }
 
-export { getSubmission, getAllSubmissions, createSubmission, setToken }
+export { getByIdSubmission, getAllSubmissions, createSubmission, setToken }

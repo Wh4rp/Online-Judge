@@ -1,0 +1,42 @@
+#problem-list-header {
+    margin: 0 10px;
+    padding: 0 10px;
+}
+
+#problem-list-header {
+    display: flex;
+    width: 500px;
+}
+
+#problem-list-header__title {
+    flex-grow: 1;
+}
+
+#problem-list-header__submissions {
+    margin-left: 10px;
+}
+
+.problem-item {
+    display: flex;
+    width: 500px;
+    background-color: white;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    position: relative;
+}
+
+.vertical-line {
+    height: 100%;
+    width: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    background-color: #dae2e5;
+}
+
+.problem-item__title {
+    flex-grow: 1;
+}
