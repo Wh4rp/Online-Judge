@@ -33,6 +33,10 @@ const problemSchema = new mongoose.Schema({
             required: [true, "Output is required"],
             minlength: 5,
         },
+        subtasks: [{
+            score: Number,
+            description: String,
+        }],
         examples: {
             type: [
                 {
@@ -48,12 +52,33 @@ const problemSchema = new mongoose.Schema({
                         type: String,
                         required: [true, "Example output is required"],
                     },
+                    explanation: {
+                        type: String,
+                    },
                 }
             ],
             validate: v => v.length > 0,
             message: "At least one example is required",
             required: [true, "Examples are required"],
         }
+    },
+    has_subtasks: {
+        type: Boolean,
+        default: false,
+    },
+    subtasks_score: {
+        type: [
+            {
+                id: {
+                    type: Number,
+                    required: [true, "Subtask id is required"],
+                },
+                score: {
+                    type: Number,
+                    required: [true, "Subtask score is required"],
+                },
+            }
+        ],
     },
     time_limit: {
         type: Number,
@@ -70,8 +95,8 @@ const problemSchema = new mongoose.Schema({
     // Checker data for backend
     custom: {
         type: Boolean,
-        required: [true, "Custom checker is required"],
         default: false,
+        required: [true, "Custom checker is required"],
     },
     checker: {
         type: String,
@@ -83,6 +108,19 @@ const problemSchema = new mongoose.Schema({
                 id: {
                     type: Number,
                     required: [true, "Test case id is required"],
+                },
+                name: {
+                    type: String,
+                    default: "",
+                },
+                type: {
+                    type: String,
+                    required: [true, "Test case type is required"],
+                    enum: ['normal', 'subtask'],
+                },
+                subtask_id: {
+                    type: Number,
+                    default: 0,
                 },
                 input: {
                     type: String,
