@@ -34,6 +34,13 @@ MONGO_URI=<mongodb-connection-string>
 
 - `MONGO_URI` can be obtained from [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
 
+### Requirements
+
+- [Node.js](https://nodejs.org/en/) (v14.17.0 or higher)
+- [MongoDB](https://www.mongodb.com/) (v4.4.6 or higher)
+- [time](https://www.gnu.org/software/time/) (for get memory usage)
+- [ulimit](https://ss64.com/bash/ulimit.html) (for limit memory usage)
+
 ### Build and Run
 
 ```bash
