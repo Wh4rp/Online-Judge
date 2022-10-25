@@ -37,6 +37,9 @@ const submissionSchema = new mongoose.Schema({
                     type: Number,
                     required: [true, "Verdict id is required"],
                 },
+                message: {
+                    type: String,
+                },
                 verdict: {
                     type: String,
                     enum: ['pending', 'AC', 'WA', 'time_limit_exceeded', 'compilation error', 'runtime error'],
@@ -57,6 +60,27 @@ const submissionSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'compilation error', 'solved', 'failed'],
         required: [true, "Global verdict is required"],
+    },
+    score_subtasks: {
+        type: [
+            {
+                id: {
+                    type: Number,
+                    required: [true, "Score subtask id is required"],
+                },
+                score: {
+                    type: Number,
+                    required: [true, "Score is required"],
+                },
+                max_score: {
+                    type: Number,
+                    required: [true, "Max score is required"],
+                },
+            }
+        ],
+    },
+    score_global: {
+        type: Number,
     },
     time_execution: {
         type: Number,

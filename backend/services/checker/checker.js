@@ -86,7 +86,7 @@ const runTestCase = async (run_command, time_limit, memory_limit) => {
 }
 
 const checkTestCase = async (checker_command) => {
-    const command = `${checker_command} ${PATH}/test_case/test_case.in ${PATH}/test_case/test_case.sol ${PATH}/test_case/test_case.out`
+    const command = `${checker_command} ${PATH}/test_case/test_case.in ${PATH}/test_case/test_case.out ${PATH}/test_case/test_case.sol`
     console.log('Running ', command)
     return new Promise(function (resolve, reject) {
         exec(command, (err, stdout, stderr) => {
@@ -117,8 +117,11 @@ const checkSubmission = async (run_command, checker_command, test_cases, time_li
         const run_verdict = await runTestCase(run_command, time_limit, memory_limit)
         if (run_verdict.status === 'error') {
             verdicts.push({
-                ...run_verdict,
                 id: id,
+                verdict: run_verdict.verdict,
+                message: run_verdict.message,
+                time_execution: run_verdict.time_execution,
+                memory_execution: run_verdict.memory_execution,
             })
             id += 1
             continue
@@ -140,10 +143,6 @@ const checkSubmission = async (run_command, checker_command, test_cases, time_li
 const global_verdict = (verdicts) => {
     let verdict = 'solved'
     for (const v of verdicts) {
-        if (v.verdict === 'compilation error') {
-            verdict = 'compilation error'
-            break
-        }
         if (v.verdict !== 'AC') {
             verdict = 'failed'
             break
@@ -174,12 +173,17 @@ const checker = async (submission, problem) => {
         await sleep(2)
         if (!compiled.success) {
             console.log('Compilation error')
-            return [{
+            submission.status = 'done'
+            submission.global_verdict = 'compilation error'
+            submission.verdicts = [{
                 id: 0,
-                verdict: "compilation error",
+                verdict: 'compilation error',
+                message: compiled.error,
                 time_execution: 0,
                 memory_execution: 0,
             }]
+            submission.save()
+            return submission
         }
         else {
             console.log('Compilation success')
@@ -215,9 +219,47 @@ const checker = async (submission, problem) => {
 
     console.log('verdicts', verdicts)
 
+    await sleep(2)
+
     submission.verdicts = verdicts
     submission.global_verdict = global_verdict(verdicts)
     submission.status = 'done'
+
+
+    if (problem.has_subtasks) {
+        console.log('Getting subtask scores')
+        await sleep(2)
+        let score_subtasks = []
+        let score_global = 0
+
+        for (const subtask of problem.subtasks) {
+            let score = 0
+            let max_score = 0
+            let subtask_verdict = 'solved'
+            for (const id of subtask.test_cases) {
+                max_score += problem.test_cases[id].score
+                if (verdicts[id].verdict === 'AC') {
+                    score += problem.test_cases[id].score
+                }
+                else {
+                    subtask_verdict = 'failed'
+                }
+            }
+            score_global += score
+            score_subtasks.push({
+                id: subtask.id,
+                verdict: subtask_verdict,
+                score: subtask_verdict === 'solved' ? subtask.score : score,
+                max_score: max_score,
+            })
+        }
+        submission.score_subtasks = score_subtasks
+        submission.score_global = score_global
+        console.log('submission.score_subtasks', submission.score_subtasks)
+        console.log('submission.score_global', submission.score_global)
+    }
+
+    console.log('submission.global_verdict', submission.global_verdict)
     submission.save()
     return submission
 }
@@ -233,7 +275,19 @@ using namespace std;
 int main() {
     int a, b;
     cin >> a >> b;
-    cout << a - b << endl;
+    cout << a + b << endl;
+    return 0;
+}`,
+    language: 'cpp',
+}
+
+const submission_compiled_error = {
+    code: `#include <iostream>
+using namespace std;
+int main() {
+    a, b;
+    cin >> a >> b;
+    cout << a + b << endl;
     return 0;
 }`,
     language: 'cpp',
@@ -258,18 +312,21 @@ const problem_normal = {
 
 const problem_subtask = {
     has_subtasks: true,
-    subtasks_score: [
+    subtasks: [
         {
             id: 0,
             score: 20,
+            test_cases: [0],
         },
         {
             id: 1,
             score: 30,
+            test_cases: [1],
         },
         {
             id: 2,
             score: 50,
+            test_cases: [2],
         }
     ],
     time_limit: 1,
@@ -281,6 +338,7 @@ const problem_subtask = {
             name: 'test case 1',
             type: 'subtask',
             subtask_id: 0,
+            score: 20,
             input: '1 2',
             output: '3',
         },
@@ -289,6 +347,7 @@ const problem_subtask = {
             name: 'test case 2',
             type: 'subtask',
             subtask_id: 1,
+            score: 30,
             input: '3 2',
             output: '5',
         },
@@ -297,6 +356,7 @@ const problem_subtask = {
             name: 'test case 3',
             type: 'subtask',
             subtask_id: 2,
+            score: 50,
             input: '4 2',
             output: '6',
         }
@@ -304,4 +364,4 @@ const problem_subtask = {
 }
 
 // Run checker
-checker(submission, problem_normal)
+checker(submission_compiled_error, problem_subtask)

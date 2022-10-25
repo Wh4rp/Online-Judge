@@ -66,7 +66,7 @@ const problemSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    subtasks_score: {
+    subtasks: {
         type: [
             {
                 id: {
@@ -77,6 +77,10 @@ const problemSchema = new mongoose.Schema({
                     type: Number,
                     required: [true, "Subtask score is required"],
                 },
+                test_cases: {
+                    type: [Number],
+                    required: [true, "Subtask test cases are required"],
+                }
             }
         ],
     },
@@ -119,6 +123,10 @@ const problemSchema = new mongoose.Schema({
                     enum: ['normal', 'subtask'],
                 },
                 subtask_id: {
+                    type: Number,
+                    default: 0,
+                },
+                score: {
                     type: Number,
                     default: 0,
                 },
